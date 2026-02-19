@@ -50,4 +50,6 @@ Thumbs.db
 TestResults/
 coverage/
 
-activitywebapp.db
+activitywebapp.db*
+
+appsettings.json
