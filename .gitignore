@@ -18,7 +18,7 @@ bld/
 .vs/
 
 # Visual Studio Code
-.vscode/
+# .vscode/
 *.code-workspace
 
 # User-specific files
@@ -49,3 +49,5 @@ Thumbs.db
 # Testing
 TestResults/
 coverage/
+
+activitywebapp.db
