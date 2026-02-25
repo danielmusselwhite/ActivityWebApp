@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +11,11 @@ builder.Services.AddDbContext<Persistence.AppDbContext>( options =>
 });
 #endregion
 
+builder.Services.AddCors(); // Add Cors
 
 var app = builder.Build();
+
+app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://localhost:3000")); // Allow all requests from our React App (host urls)
 
 // Configure the HTTP request pipeline.
 app.MapControllers();

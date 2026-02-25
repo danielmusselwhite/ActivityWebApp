@@ -6,7 +6,7 @@
     "configurations": [
 
         {
-            "name": "API",
+            "name": "API Dev And Debug",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -24,6 +24,16 @@
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/API/Views"
             }
+        },
+        {
+            "name": "Client Dev and Debug",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/Client",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "dev"],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
         }
     ]
 }

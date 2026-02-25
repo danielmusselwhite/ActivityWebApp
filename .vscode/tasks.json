@@ -14,6 +14,14 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "npm: client dev",
+      "type": "npm",
+      "script": "dev",
+      "cwd": "${workspaceFolder}/Client",
+      "problemMatcher": [], 
+      "isBackground": true
     }
   ]
 }

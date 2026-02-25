@@ -53,3 +53,7 @@ coverage/
 activitywebapp.db*
 
 appsettings.json
+
+# Node, React and Vit
+node_modules/
+dist/
