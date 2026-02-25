@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css'
-import Typography from '@mui/material/Typography';
-import ListItem from '@mui/material/ListItem';
-import { ListItemText } from '@mui/material';
+import { ListItemText, ListItem, List, Typography } from '@mui/material';
+import axios from "axios"
 
 function App() {
   
@@ -13,9 +12,8 @@ function App() {
   // useEffect runs "side effects" (code that interacts with the outside world).
   useEffect(() => {
     // Communicate with my API endpoint to get the list of activities, then parsing that from json and passing it into SetActivities to re-rerender the component with the response
-    fetch('https://localhost:5001/api/activities')
-      .then(response => response.json())
-      .then(data => setActivities(data))
+    axios.get<Activity[]>('https://localhost:5001/api/activities')
+      .then(response => setActivities(response.data))
 
       return () => {} // The return is a "Cleanup Function", called by React when component unmounts or before effect runs again (if dependencies change), in this case it runs '{}' (nothing)
   }, []) // Empty dependency array = run once on mount only.
@@ -23,14 +21,14 @@ function App() {
   return (
     <>
       <Typography variant="h3">My React WebApp</Typography>
-      <ul>
+      <List>
         {/* Map so that each activity gets its own List Entry */}
         {activities.map((activity) => (
           <ListItem key={activity.id}>
             <ListItemText>{activity.title}</ListItemText>
           </ListItem>
         ))}
-      </ul>
+      </List>
     </>
   )
 }
