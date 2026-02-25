@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import './App.css'
+import Typography from '@mui/material/Typography';
+import ListItem from '@mui/material/ListItem';
+import { ListItemText } from '@mui/material';
 
 function App() {
   
@@ -18,15 +21,17 @@ function App() {
   }, []) // Empty dependency array = run once on mount only.
 
   return (
-    <div>
-      <h3>My React WebApp</h3>
+    <>
+      <Typography variant="h3">My React WebApp</Typography>
       <ul>
         {/* Map so that each activity gets its own List Entry */}
         {activities.map((activity) => (
-          <li key={activity.id}>{activity.title}</li>
+          <ListItem key={activity.id}>
+            <ListItemText>{activity.title}</ListItemText>
+          </ListItem>
         ))}
       </ul>
-    </div>
+    </>
   )
 }
 
