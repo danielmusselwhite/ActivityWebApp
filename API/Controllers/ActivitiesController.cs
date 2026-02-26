@@ -9,12 +9,12 @@ using Application.Errors;
 
 namespace API.Controllers;
 
-public class ActivitiesController(IMediator mediator) : BaseApiController
+public class ActivitiesController() : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<List<Domain.Activity>>> GetActivities()
     {
-        return Ok(await mediator.Send(new GetActivityList.Query()));
+        return Ok(await Mediator.Send(new GetActivityList.Query()));
     }
 
     [HttpGet("{id}")]
@@ -22,9 +22,9 @@ public class ActivitiesController(IMediator mediator) : BaseApiController
     {
         try
         {
-            return Ok(await mediator.Send(new GetActivityDetails.Query{Id = id}));
+            return Ok(await Mediator.Send(new GetActivityDetails.Query{Id = id}));
         }
-        catch (NotFoundException ex)
+        catch (NotFoundException ex) 
         {
             return NotFound(ex.Message);
         }
