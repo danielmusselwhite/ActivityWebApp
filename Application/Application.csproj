@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="Activities\" />
+    <Folder Include="Activities\Commands\" />
     <Folder Include="Activities\Queries\" />
     <Folder Include="Errors\" />
   </ItemGroup>

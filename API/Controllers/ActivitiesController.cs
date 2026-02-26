@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 using Application.Activities.Queries;
 using Application.Errors;
+using Domain;
+using Application.Activities.Commands;
 
 namespace API.Controllers;
 
@@ -14,7 +16,14 @@ public class ActivitiesController() : BaseApiController
     [HttpGet]
     public async Task<ActionResult<List<Domain.Activity>>> GetActivities()
     {
-        return Ok(await Mediator.Send(new GetActivityList.Query()));
+        try
+        {
+            return Ok(await Mediator.Send(new GetActivityList.Query()));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("{id}")]
@@ -27,6 +36,19 @@ public class ActivitiesController() : BaseApiController
         catch (NotFoundException ex) 
         {
             return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<string>> CreateActivity(Activity activity)
+    {
+        try
+        {
+            return Ok(await Mediator.Send(new CreateActivity.Command{Activity = activity}));
         }
         catch (Exception ex)
         {
