@@ -3,24 +3,34 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Persistence;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
+using Application.Activities.Queries;
+using Application.Errors;
 
 namespace API.Controllers;
 
-public class ActivitiesController(AppDbContext context) : BaseApiController
+public class ActivitiesController(IMediator mediator) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<List<Domain.Activity>>> GetActivities()
     {
-        var activities = await context.Activities.ToListAsync();
-        return Ok(activities);
+        return Ok(await mediator.Send(new GetActivityList.Query()));
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<List<Domain.Activity>>> GetActivity(string id)
+    public async Task<ActionResult<Domain.Activity>> GetActivity(string id)
     {
-        var activity = await context.Activities
-            .Where(a => a.Id == id)
-            .FirstOrDefaultAsync();
-        return activity != null ? Ok(activity) : NotFound();
+        try
+        {
+            return Ok(await mediator.Send(new GetActivityDetails.Query{Id = id}));
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

@@ -1,3 +1,4 @@
+using Application.Activities.Queries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -11,7 +12,12 @@ builder.Services.AddDbContext<Persistence.AppDbContext>( options =>
 });
 #endregion
 
-builder.Services.AddCors(); // Add Cors
+builder.Services.AddCors();
+
+#region Adding our custom services
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityDetails.Handler>());
+#endregion
 
 var app = builder.Build();
 
