@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { ListItemText, ListItem, List, Typography } from '@mui/material';
+import { ListItemText, ListItem, List, CssBaseline } from '@mui/material';
 import axios from "axios"
+import NavBar from './NavBar';
 
 function App() {
   
@@ -19,7 +20,8 @@ function App() {
 
   return (
     <>
-      <Typography variant="h3">My React WebApp</Typography>
+      <CssBaseline/>
+      <NavBar/>
       <List>
         {/* Map so that each activity gets its own List Entry */}
         {activities.map((activity) => (
