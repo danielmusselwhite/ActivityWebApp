@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { ListItemText, ListItem, List, CssBaseline, Container } from '@mui/material';
+import { CssBaseline, Container, Box } from '@mui/material';
 import axios from "axios"
 import NavBar from './NavBar';
+import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 
 function App() {
   
@@ -19,20 +20,13 @@ function App() {
   }, []) // Empty dependency array = run once on mount only.
 
   return (
-    <>
+    <Box sx={{backgroundImage: 'linear-gradient(135deg, #73a09b 0%, #a1d4c4 69%, #c4f3dc 89%)'}}>
       <CssBaseline/>
       <NavBar/>
       <Container maxWidth='xl' sx={{mt: 3}}>
-        <List>
-          {/* Map so that each activity gets its own List Entry */}
-          {activities.map((activity) => (
-            <ListItem key={activity.id}>
-              <ListItemText>{activity.title}</ListItemText>
-            </ListItem>
-          ))}
-        </List>
+          <ActivityDashboard activities={activities}/>
       </Container>
-    </>
+    </Box>
   )
 }
 

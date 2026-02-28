@@ -1,4 +1,3 @@
-import React from 'react'
 import { AppBar, Box, Button, Container, MenuItem, Toolbar, Typography } from '@mui/material'
 import { Group } from "@mui/icons-material"
 
@@ -15,7 +14,7 @@ export default function NavBar() {
                             <Typography variant="h4" fontWeight="bold">My Activities WebApp</Typography>
                         </MenuItem>
                     </Box>
-                    
+
                     <Box sx={{display: 'flex'}}>
                         <MenuItem sx={{display: 'flex', gap:2}}>
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase">Activities</Typography>
