@@ -20,12 +20,8 @@ public class GetActivityDetails
         {
             var activity = await context.Activities
                 .Where(a => a.Id == request.Id)
-                .FirstOrDefaultAsync();
-
-            if(activity == null)
-            {
-                throw new NotFoundException(nameof(Activity), request.Id);
-            }
+                .FirstOrDefaultAsync()
+                    ?? throw new NotFoundException(nameof(Activity), request.Id);
 
             return activity;
         }
