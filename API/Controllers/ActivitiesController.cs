@@ -55,7 +55,7 @@ public class ActivitiesController() : BaseApiController
             return BadRequest(ex.Message);
         }
     }
-    
+
     [HttpPut]
     public async Task<ActionResult<string>> EditActivity(Activity activity)
     {
@@ -63,6 +63,20 @@ public class ActivitiesController() : BaseApiController
         {
             await Mediator.Send(new EditActivity.Command{Activity = activity});
             return NoContent(); // no point sending anything back to client, as they know what has been updated
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<string>> DeleteActivity(string id)
+    {
+        try
+        {
+            await Mediator.Send(new DeleteActivity.Command{Id = id});
+            return Ok(); // no point sending anything back to client, as they know what has been updated
         }
         catch (Exception ex)
         {
