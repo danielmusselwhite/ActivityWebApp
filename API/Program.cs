@@ -1,6 +1,8 @@
 using Application.Activities.Queries;
+using Application.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,12 @@ builder.Services.AddCors();
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityDetails.Handler>());
 #endregion
+
+// Registering auto mapper
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddMaps(typeof(MappingProfiles).Assembly);
+});
 
 var app = builder.Build();
 
