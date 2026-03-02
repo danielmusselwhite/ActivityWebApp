@@ -10,6 +10,9 @@ function App() {
   // specified as a List of Activities (Activity[]), and defaulted to an empty list
   const [activities, setActivities] = useState<Activity[]>([]);
 
+  // storing the selectedActivity
+  const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined);
+
   // useEffect runs "side effects" (code that interacts with the outside world).
   useEffect(() => {
     // Communicate with my API endpoint to get the list of activities, then parsing that from json and passing it into SetActivities to re-rerender the component with the response
@@ -19,12 +22,26 @@ function App() {
       return () => {} // The return is a "Cleanup Function", called by React when component unmounts or before effect runs again (if dependencies change), in this case it runs '{}' (nothing)
   }, []) // Empty dependency array = run once on mount only.
 
+  //functions to handle setting the selected activity
+  const handleSelectActivity = (id: string) => {
+    setSelectedActivity(activities.find(x => x.id === id));
+  }
+  const handleCancelSelectActivity = () => {
+    setSelectedActivity(undefined);
+  }
+
   return (
     <Box sx={{backgroundImage: 'linear-gradient(135deg, #73a09b 0%, #a1d4c4 69%, #c4f3dc 89%)'}}>
       <CssBaseline/>
       <NavBar/>
       <Container maxWidth='xl' sx={{mt: 3}}>
-          <ActivityDashboard activities={activities}/>
+          {/* passing to activity dashboard the activities, selected activity, and handler methods */}
+          <ActivityDashboard 
+            activities={activities}
+            selectActivity = {handleSelectActivity}
+            cancelSelectActivity = {handleCancelSelectActivity}
+            selectedActivity = {selectedActivity}
+          />
       </Container>
     </Box>
   )
