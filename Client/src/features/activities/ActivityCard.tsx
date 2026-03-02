@@ -6,7 +6,7 @@ type Props ={
 
 export default function ActivityCard({activity}: Props) {
   return (
-    <Card>
+    <Card sx={{borderRadius: 3}}>
         <CardContent>
             <Typography variant="h5">{activity.title}</Typography>
             <Typography sx={{color: 'text.secondary', mb: 1}}>{activity.date}</Typography>
