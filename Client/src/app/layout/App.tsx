@@ -13,6 +13,9 @@ function App() {
   // storing the selectedActivity
   const [selectedActivity, setSelectedActivity] = useState<Activity | undefined>(undefined);
 
+  // state used to handle showing of the edit form
+  const [editMode, setEditMode] = useState(false);
+
   // useEffect runs "side effects" (code that interacts with the outside world).
   useEffect(() => {
     // Communicate with my API endpoint to get the list of activities, then parsing that from json and passing it into SetActivities to re-rerender the component with the response
@@ -30,10 +33,22 @@ function App() {
     setSelectedActivity(undefined);
   }
 
+  // functions to handle showing of the edit form
+  const handleOpenEditForm = (id?: string) => {
+    if(id) 
+      handleSelectActivity(id);
+    else
+      handleCancelSelectActivity();
+    setEditMode(true);
+  }
+  const handleCloseEditForm = () => {
+    setEditMode(false);
+  }
+
   return (
     <Box sx={{backgroundImage: 'linear-gradient(135deg, #73a09b 0%, #a1d4c4 69%, #c4f3dc 89%)'}}>
       <CssBaseline/>
-      <NavBar/>
+      <NavBar openForm={handleOpenEditForm}/>
       <Container maxWidth='xl' sx={{mt: 3}}>
           {/* passing to activity dashboard the activities, selected activity, and handler methods */}
           <ActivityDashboard 
@@ -41,6 +56,9 @@ function App() {
             selectActivity = {handleSelectActivity}
             cancelSelectActivity = {handleCancelSelectActivity}
             selectedActivity = {selectedActivity}
+            openForm={handleOpenEditForm} 
+            closeForm={handleCloseEditForm}
+            editMode={editMode}
           />
       </Container>
     </Box>
