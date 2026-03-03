@@ -33,6 +33,11 @@ function App() {
     setSelectedActivity(undefined);
   }
 
+  //functions to handle deleting activity
+  const handleDeleteActivity = (id: string) => {
+    setActivities(activities.filter(x => x.id !== id)); // todo - just dummy deleting locally in memory for now
+  }
+
   // functions to handle showing of the edit form
   const handleOpenEditForm = (id?: string) => {
   if(id) 
@@ -73,6 +78,7 @@ function App() {
             closeForm={handleCloseEditForm}
             editMode={editMode}
             submitForm={handleSubmitForm}
+            deleteActivity={handleDeleteActivity}
           />
       </Container>
     </Box>

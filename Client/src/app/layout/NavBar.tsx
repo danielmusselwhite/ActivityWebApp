@@ -31,7 +31,7 @@ export default function NavBar({openForm}: Props) {
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase">Contact</Typography>
                         </MenuItem>
                     </Box>
-                    <Button size="large" variant="contained" color="warning" onClick={openForm}>Create Activity</Button>
+                    <Button size="large" variant="contained" color="info" onClick={openForm}>Create Activity</Button>
                 </Toolbar>
             </Container>
         </AppBar>
