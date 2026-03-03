@@ -35,8 +35,8 @@ function App() {
 
   // functions to handle showing of the edit form
   const handleOpenEditForm = (id?: string) => {
-    if(id) 
-      handleSelectActivity(id);
+  if(id) 
+    handleSelectActivity(id);
     else
       handleCancelSelectActivity();
     setEditMode(true);
@@ -44,6 +44,19 @@ function App() {
   const handleCloseEditForm = () => {
     setEditMode(false);
   }
+  const handleSubmitForm = (activity: Activity) => {
+    if(activity.id) {
+      setActivities(activities.map(x => x.id === activity.id ? activity : x)) // if this activities id is a match, then update its value with this activity; else use the existing activity
+      setSelectedActivity(activity); // set so that we update the UI
+    }
+    else{
+      const newActivity = {...activity, id: activities.length.toString()} // what is this syntax + set id to new id insert
+      setActivities([...activities, newActivity]) // append new activity 
+      setSelectedActivity(activity); // set so that we update the UI
+    }
+    setEditMode(false);
+  }
+
 
   return (
     <Box sx={{backgroundImage: 'linear-gradient(135deg, #73a09b 0%, #a1d4c4 69%, #c4f3dc 89%)'}}>
@@ -59,6 +72,7 @@ function App() {
             openForm={handleOpenEditForm} 
             closeForm={handleCloseEditForm}
             editMode={editMode}
+            submitForm={handleSubmitForm}
           />
       </Container>
     </Box>
