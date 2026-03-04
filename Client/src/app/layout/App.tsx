@@ -20,12 +20,6 @@ function App() {
   }
   //#endregion
 
-  //#region functions to handle deleting activity
-  const handleDeleteActivity = (id: string) => {
-    // setActivities(activities.filter(x => x.id !== id)); // todo - just dummy deleting locally in memory for now
-  }
-  //#endregion
-
   //#region functions to handle showing of the edit form
   const handleOpenEditForm = (id?: string) => {
   if(id) 
@@ -63,7 +57,6 @@ function App() {
                 openForm={handleOpenEditForm} 
                 closeForm={handleCloseEditForm}
                 editMode={editMode}
-                deleteActivity={handleDeleteActivity}
               />
             )
           }

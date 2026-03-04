@@ -43,10 +43,26 @@ export const useActivities = () => {
     }
   })
 
+  // Custom hook using Reactquery to Delete (useMutation for manipulation)
+  const deleteActivity = useMutation({
+    mutationFn: async (id: string) => {
+      return await agent.delete(`/activities/${id}`)
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['activities']
+      })
+    },
+    onError: (error) => {
+      console.error("Failed to create activity:", error);
+    }
+  })
+
   return {
     activities,
     isPending,
     updateActivity,
-    createActivity
+    createActivity,
+    deleteActivity
   }
 }
