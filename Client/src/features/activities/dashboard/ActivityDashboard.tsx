@@ -30,7 +30,7 @@ export default function ActivityDashboard({activities, selectActivity, cancelSel
                     // if we selected and activity and are NOT in ediit mode, view it
                     selectedActivity && !editMode &&
                     <ActivityDetail 
-                        activity={selectedActivity}
+                        selectedActivity={selectedActivity}
                         cancelSelectActivity = {cancelSelectActivity} 
                         openForm={openForm}
                     />
