@@ -8,7 +8,7 @@ type Props = {
 }
 
 export default function ActivityForm({activity, closeForm}: Props) {
-    const {updateActivity} = useActivities(); // Reference the updateActivity function from the useActivities hook.
+    const {updateActivity, createActivity} = useActivities(); // Reference the custom useActivities hook.
 
     // Handles submission of the MUI Box rendered as a real <form> element
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -34,7 +34,11 @@ export default function ActivityForm({activity, closeForm}: Props) {
             await updateActivity.mutateAsync(data);
             closeForm();
         }
-        // todo - if activity didn't have an id then create new activity
+        // else, we are creating an activity
+        else{
+            await createActivity.mutateAsync(data);
+            closeForm();
+        }
     }
 
     return (
@@ -53,7 +57,7 @@ export default function ActivityForm({activity, closeForm}: Props) {
                 <TextField name="venue"  label="Venue" defaultValue={activity?.venue}/>
                 <Box display="flex" justifyContent="end" gap={3}>
                     <Button color="inherit" onClick={closeForm}>Cancel</Button>
-                    <Button type="submit" color="success" variant="contained" loading={updateActivity.isPending}>Submit</Button>
+                    <Button type="submit" color="success" variant="contained" loading={updateActivity.isPending || createActivity.isPending}>Submit</Button>
                 </Box>
             </Box>
         </Paper>

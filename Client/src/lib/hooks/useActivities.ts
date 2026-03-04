@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
 
-// Custom hook using ReactQuery to Get Information (useQuery)
+// Custom hook using ReactQuery to Get Information (useQuery for getting)
 export const useActivities = () => {
     const queryClient = useQueryClient();
 
@@ -13,7 +13,7 @@ export const useActivities = () => {
     }
   });
 
-  // Custom hook using ReactQuery to Update Information (useMutation)
+  // Custom hook using ReactQuery to Update Information (useMutation for manipulation)
   const updateActivity = useMutation({
     mutationFn: async (activity: Activity) => { // main mutationFn being used
       return await agent.put('/activities', activity) // baseurl stored in agent class, just making HTTP PUTting the activity into activities
@@ -28,9 +28,25 @@ export const useActivities = () => {
     }
   })
 
+  // Custom hook using Reactquery to Create (useMutation for manipulation)
+  const createActivity = useMutation({
+    mutationFn: async (activity: Activity) => {
+      return await agent.post('/activities', activity)
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['activities']
+      })
+    },
+    onError: (error) => {
+      console.error("Failed to create activity:", error);
+    }
+  })
+
   return {
     activities,
     isPending,
-    updateActivity
+    updateActivity,
+    createActivity
   }
 }
