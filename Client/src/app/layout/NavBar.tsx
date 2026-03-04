@@ -1,5 +1,7 @@
 import { AppBar, Box, Button, Container, MenuItem, Toolbar, Typography } from '@mui/material'
 import { Group } from "@mui/icons-material"
+import { NavLink } from 'react-router'
+import MenuItemLink from '../app/shared/components/MenuItemLink'
 
 export default function NavBar() {
   return (
@@ -8,26 +10,24 @@ export default function NavBar() {
             <Container maxWidth='xl'>
                 <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
                     <Box>
-                        <MenuItem sx={{display: 'flex', gap:2}}>
+                        <MenuItemLink to='/'>
                             <Group fontSize="large" />
                             <Typography variant="h4" fontWeight="bold">My Activities WebApp</Typography>
-                        </MenuItem>
+                        </MenuItemLink>
                     </Box>
 
                     <Box sx={{display: 'flex'}}>
-                        <MenuItem sx={{display: 'flex', gap:2}}>
+                        <MenuItemLink to='/activities'>
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase">Activities</Typography>
-                        </MenuItem>
+                        </MenuItemLink>
 
-                        <MenuItem sx={{display: 'flex', gap:2}}>
-                            <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase">About</Typography>
-                        </MenuItem>
-
-                        <MenuItem sx={{display: 'flex', gap:2}}>
-                            <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase">Contact</Typography>
-                        </MenuItem>
+                        <MenuItemLink to='/createActivity'>
+                            <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >Create Activity</Typography>
+                        </MenuItemLink>
                     </Box>
-                    <Button size="large" variant="contained" color="info" onClick={() => {}}>Create Activity</Button>
+                        <MenuItem>
+                            <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >ToDo - UserMenu</Typography>
+                        </MenuItem>
                 </Toolbar>
             </Container>
         </AppBar>

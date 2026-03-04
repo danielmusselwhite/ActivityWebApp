@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import ActivityCard from '../ActivityCard'
 import { useActivities } from '../../../lib/hooks/useActivities';
-import LoadingFrag from '../../utilities/LoadingFrag';
+import LoadingFrag from '../../../app/app/shared/components/LoadingFrag';
 
 export default function ActivityList() {
   const {activities, isPending} = useActivities(); // using our custom hook to get activities and ispending state
