@@ -1,33 +1,33 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material"
-import { useActivities } from "../../../lib/hooks/useActivities"
+import { useNavigate, useParams } from "react-router";
+import { useActivities } from "../../../lib/hooks/useActivities";
+import LoadingFrag from "../../../app/app/shared/components/LoadingFrag";
 
-type Props = {
-    selectedActivity: Activity
-    cancelSelectActivity: () => void
-    openForm: (id: string) => void
-}
+export default function ActivityDetail() {
+  const navigate = useNavigate();
+  const {id} = useParams();
+  const {activity, isLoadingActivity} = useActivities(id);
 
-export default function ActivityDetail({selectedActivity, cancelSelectActivity, openForm}: Props) {
-  // temp fix to re-get the selected detail activity if activityDetail is re-loaded after an update
-  const {activities} = useActivities();
-  const activity: Activity | undefined = activities?.find(x => x.id === selectedActivity.id)
-
-  if(!activity)
+  if (isLoadingActivity){
+    return (
+      <LoadingFrag/>
+    )
+  }
+  else if(!activity)
   {
     return (
     <Card sx={{borderRadius: 3}}>
-      <Typography variant="h5">No Activity</Typography>
+      <Typography variant="h5">Activity Not Found</Typography>
     </Card>
       
     )
   }
-  else
-  {
+  else {
     return (
       <Card sx={{borderRadius: 3}}>
         <CardMedia
           component='img'
-          src={`images/categoryImages/${activity.category}.jpg`}
+          src={`/images/categoryImages/${activity.category}.jpg`}
         />
         <CardContent>
           <Typography variant="h5">{activity.title}</Typography>
@@ -35,8 +35,9 @@ export default function ActivityDetail({selectedActivity, cancelSelectActivity, 
           <Typography variant="body1">{activity.description}</Typography>
         </CardContent>
         <CardActions>
-          <Button color="primary" onClick={() => openForm(activity.id)}>Edit</Button>
-          <Button color="inherit" onClick={cancelSelectActivity}>Cancel</Button>
+          {/* todo - refactor to simplify */}
+          <Button color="primary" onClick={() => navigate(`/manage/${activity.id}`)}>Edit</Button>
+          <Button color="inherit" onClick={() => navigate('/activities')}>Cancel</Button>
         </CardActions>
       </Card>
     )

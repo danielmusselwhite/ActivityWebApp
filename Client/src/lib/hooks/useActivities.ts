@@ -1,10 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
 
-// Custom hook using ReactQuery to Get Information (useQuery for getting)
-export const useActivities = () => {
+// Custom class of hooks using ReactQuery relating to Activities controller
+export const useActivities = (id?: string) => {
     const queryClient = useQueryClient();
 
+    // Custom hook using ReactQuery to GetAll activities (useQuery for getting)
     const {data: activities, isPending} = useQuery({
     queryKey: ['activities'], // key to identify this query
     queryFn: async () => { // main queryFn being used
@@ -13,10 +14,21 @@ export const useActivities = () => {
     }
   });
 
+  // Custom hook using ReactQuery to Get a specific activity (useQuery for getting)
+  const {data: activity, isLoading: isLoadingActivity} = useQuery({
+    queryKey: ['acitivites', id], // also pass in the id as a unique key as we are cache specifically that activitys info
+    queryFn: async () => {
+      const response = await agent.get<Activity>(`/activities/${id}`); 
+      return response.data;
+    },
+    enabled: !!id // only run if id is provided
+
+  })
+
   // Custom hook using ReactQuery to Update Information (useMutation for manipulation)
   const updateActivity = useMutation({
     mutationFn: async (activity: Activity) => { // main mutationFn being used
-      return await agent.put('/activities', activity) // baseurl stored in agent class, just making HTTP PUTting the activity into activities
+      return (await agent.put('/activities', activity)).data // baseurl stored in agent class, just making HTTP PUTting the activity into activities
     },
     onSuccess: async () => { // upon successfully updating the mutation...
       await queryClient.invalidateQueries({
@@ -31,7 +43,7 @@ export const useActivities = () => {
   // Custom hook using Reactquery to Create (useMutation for manipulation)
   const createActivity = useMutation({
     mutationFn: async (activity: Activity) => {
-      return await agent.post('/activities', activity)
+      return (await agent.post('/activities', activity)).data
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -46,7 +58,7 @@ export const useActivities = () => {
   // Custom hook using Reactquery to Delete (useMutation for manipulation)
   const deleteActivity = useMutation({
     mutationFn: async (id: string) => {
-      return await agent.delete(`/activities/${id}`)
+      return (await agent.delete(`/activities/${id}`)).data
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -63,6 +75,8 @@ export const useActivities = () => {
     isPending,
     updateActivity,
     createActivity,
-    deleteActivity
+    deleteActivity,
+    activity,
+    isLoadingActivity
   }
 }

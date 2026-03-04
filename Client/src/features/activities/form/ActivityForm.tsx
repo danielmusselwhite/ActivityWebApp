@@ -1,10 +1,13 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { type FormEvent } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities";
+import { useNavigate, useParams } from "react-router";
+import LoadingFrag from "../../../app/app/shared/components/LoadingFrag";
 
 export default function ActivityForm() {
-    const {updateActivity, createActivity} = useActivities(); // Reference the custom useActivities hook.
-    const activity = {} as Activity // todo - delete me
+    const {id} = useParams();
+    const {updateActivity, createActivity, activity, isLoadingActivity} = useActivities(id); // Reference the custom useActivities hook.
+    const navigate = useNavigate();
 
     // Handles submission of the MUI Box rendered as a real <form> element
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -17,8 +20,6 @@ export default function ActivityForm() {
         const formDataObject = Object.fromEntries(formData.entries());
 
         // Creating a new Activity to store form values, where:
-        // - existing activity fields are preserved (like latitude, longitude, etc.)
-        // - form fields overwrite existing values if they are updated
         const data: Activity = {
             ...(activity ?? {}), // passing over old values
             ...formDataObject, // overwriting with new values
@@ -28,17 +29,28 @@ export default function ActivityForm() {
         // If we are editing an activity that already exists, also add id into data so we don't do id insert
         if(activity){
             await updateActivity.mutateAsync(data);
+            navigate(`/activities/${data.id}`)
         }
         // else, we are creating an activity
         else{
-            await createActivity.mutateAsync(data);
+            await createActivity.mutateAsync(data, {
+                onSuccess: (id) => { // after success, get the id returned from the API method that creates the activity 
+                    navigate(`/activities/${id}`)
+                }
+            });
         }
+    }
+
+    if(isLoadingActivity){
+        return (
+            <LoadingFrag />
+        )
     }
 
     return (
         <Paper sx={{borderRadius: 3, padding: 3}}>
             <Typography variant="h5" gutterBottom color="primary">
-                Create Activity
+                {activity? "Edit Activity" :  "Create Activity"}
             </Typography>
             <Box component="form" onSubmit={handleSubmit} display="flex" flexDirection="column" gap={3}>
                 <TextField name="title"  label="Title" defaultValue={activity?.title}/>
@@ -50,7 +62,7 @@ export default function ActivityForm() {
                 <TextField name="city"  label="City" defaultValue={activity?.city}/>
                 <TextField name="venue"  label="Venue" defaultValue={activity?.venue}/>
                 <Box display="flex" justifyContent="end" gap={3}>
-                    <Button color="inherit">Cancel</Button>
+                    <Button onClick={() => navigate(`/activities/${activity?.id ?? ''}`)} color="inherit">Cancel</Button>
                     <Button type="submit" color="success" variant="contained" loading={updateActivity.isPending || createActivity.isPending}>Submit</Button>
                 </Box>
             </Box>
