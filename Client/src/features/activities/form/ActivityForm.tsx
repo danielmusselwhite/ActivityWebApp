@@ -1,42 +1,40 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import { act, type FormEvent } from "react";
+import { type FormEvent } from "react";
+import { useActivities } from "../../../lib/hooks/useActivities";
 
 type Props = {
     activity?: Activity
-    closeForm: () => void
-    submitForm: (activity: Activity) => void;
+    closeForm: () => void;
 }
 
-export default function ActivityForm({activity, closeForm, submitForm}: Props) {
+export default function ActivityForm({activity, closeForm}: Props) {
+    const {updateActivity} = useActivities(); // Reference the updateActivity function from the useActivities hook.
 
     // Handles submission of the MUI Box rendered as a real <form> element
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault(); // prevent the default submit behaviour (no refresh)
         
         // Create a FormData object referencing from the submitted form element (rendered from <Box component="form".../>)
         const formData = new FormData(event.currentTarget);
 
-        // Define an empty object to store form values, where:
-        // - each key is the 'name' attribute of a form field
-        // - each value is the corresponding field value
-        const data: { [key: string]: FormDataEntryValue } = {};
+        // Convert FormData into a plain object
+        const formDataObject = Object.fromEntries(formData.entries());
 
-        // Iterate over all form entries and copy them into the data object, who's structure was defined above.
-        formData.forEach((value, key) => {
-            data[key] = value;
-        });
+        // Creating a new Activity to store form values, where:
+        // - existing activity fields are preserved (like latitude, longitude, etc.)
+        // - form fields overwrite existing values if they are updated
+        const data: Activity = {
+            ...(activity ?? {}), // passing over old values
+            ...formDataObject, // overwriting with new values
+            id: activity?.id // if actvity passed had an Id, set to it so we update instead of create
+        } as Activity; // must be done as otherwise missing fields in DTO which causes badrequest 400 on API
 
         // If we are editing an activity that already exists, also add id into data so we don't do id insert
-        if(activity?.id){
-            data.id = activity.id;
+        if(activity){
+            await updateActivity.mutateAsync(data);
+            closeForm();
         }
-
-        // At this point, 'data' contains all form input values
-        submitForm(data as unknown as Activity); // placeholder, just simple in place update prior to us implementing API
-        
-
-
-        // todo - treat as a dto and can be sent to an API
+        // todo - if activity didn't have an id then create new activity
     }
 
     return (
@@ -53,7 +51,7 @@ export default function ActivityForm({activity, closeForm, submitForm}: Props) {
                 <TextField name="venue"  label="Venue" defaultValue={activity?.venue}/>
                 <Box display="flex" justifyContent="end" gap={3}>
                     <Button color="inherit" onClick={closeForm}>Cancel</Button>
-                    <Button type="submit" color="success" variant="contained" >Submit</Button>
+                    <Button type="submit" color="success" variant="contained" loading={updateActivity.isPending}>Submit</Button>
                 </Box>
             </Box>
         </Paper>

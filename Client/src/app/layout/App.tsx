@@ -37,18 +37,6 @@ function App() {
   const handleCloseEditForm = () => {
     setEditMode(false);
   }
-  const handleSubmitForm = (activity: Activity) => {
-    // if(activity.id) {
-    //   setActivities(activities!.map(x => x.id === activity.id ? activity : x)) // if this activities id is a match, then update its value with this activity; else use the existing activity
-    //   setSelectedActivity(activity); // set so that we update the UI
-    // }
-    // else{
-    //   const newActivity = {...activity, id: activities!.length.toString()} // add key/values from activity passed in, and additional temp id 
-    //   setActivities([...activities!, newActivity]) // append new activity 
-    //   setSelectedActivity(activity); // set so that we update the UI
-    // }
-    setEditMode(false);
-  }
   //#endregion
   //#endregion
 
@@ -75,7 +63,6 @@ function App() {
                 openForm={handleOpenEditForm} 
                 closeForm={handleCloseEditForm}
                 editMode={editMode}
-                submitForm={handleSubmitForm}
                 deleteActivity={handleDeleteActivity}
               />
             )
