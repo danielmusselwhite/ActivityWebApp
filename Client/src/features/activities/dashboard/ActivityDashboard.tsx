@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material'
 import ActivityList from './ActivityList'
-import ActivityDetail from '../details/ActivityDetail'
+import ActivityDetailPage from '../details/ActivityDetailPage'
 import ActivityForm from '../form/ActivityForm'
 
 export default function ActivityDashboard() {
