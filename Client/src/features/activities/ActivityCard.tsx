@@ -1,6 +1,7 @@
 import { AccessTime, Place } from "@mui/icons-material";
 import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Chip, Divider, Typography } from "@mui/material"
 import { Link, useNavigate } from "react-router";
+import { formatDate } from "../../lib/util/util";
 
 type Props ={
     activity: Activity
@@ -42,12 +43,15 @@ export default function ActivityCard({activity}: Props) {
 
             <CardContent sx={{p: 0}}>
                 <Box display="flex" alignItems="center" mb={2} px={2}>
-                    <AccessTime sx={{mr: 1}} />
-                    <Typography variant="body2">{activity.date}</Typography>
+                    <Box display='flex' flexGrow={0} alignItems='center'>
+                        <AccessTime sx={{mr: 1}} />
+                        <Typography variant="body2" noWrap>{formatDate(activity.date)}</Typography>
+                    </Box>
                     <Place sx={{ml: 3, mr: 1}}/>
                     <Typography variant="body2">{activity.venue}</Typography>
                 <Chip label={activity.category} variant="outlined" />
                 </Box>
+
                 <Divider />
                 <Box display="flex" gap={2} sx={{backgroundColor: 'grey.200', py: 3, pl: 3}}>
                     ToDo - Add Attendees

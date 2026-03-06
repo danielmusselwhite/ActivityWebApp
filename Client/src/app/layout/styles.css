@@ -1,0 +1,14 @@
+.react-calendar{
+    width: 100% !important;
+    border: none !important;
+}
+
+.react-calendar__tile--now{
+    background-color: lightgreen !important;
+}
+
+.react-calendar__tile--now:hover{
+    background-color: palegreen !important;
+}
+
+
