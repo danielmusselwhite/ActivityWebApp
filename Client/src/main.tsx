@@ -11,14 +11,17 @@ import '@fontsource/roboto/700.css';
 import App from './app/layout/App.tsx'
 import { RouterProvider } from 'react-router'
 import { router } from './app/router/Routes.tsx'
+import { store, StoreContext } from './lib/stores/store.ts'
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools/>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <StoreContext.Provider value={store}>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools/>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </StoreContext.Provider>
   </StrictMode>,
 )

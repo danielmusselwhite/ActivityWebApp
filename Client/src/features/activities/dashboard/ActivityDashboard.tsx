@@ -1,7 +1,5 @@
 import { Grid } from '@mui/material'
 import ActivityList from './ActivityList'
-import ActivityDetailPage from '../details/ActivityDetailPage'
-import ActivityForm from '../form/ActivityForm'
 import ActivityFilters from './ActivityFilters'
 
 export default function ActivityDashboard() {

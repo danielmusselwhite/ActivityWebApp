@@ -24,6 +24,10 @@ export default function NavBar() {
                         <MenuItemLink to='/createActivity'>
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >Create Activity</Typography>
                         </MenuItemLink>
+
+                        <MenuItemLink to='/counter'>
+                            <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >Counter</Typography>
+                        </MenuItemLink>
                     </Box>
                         <MenuItem>
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >ToDo - UserMenu</Typography>
