@@ -8,6 +8,7 @@ using Application.Activities.Queries;
 using Application.Errors;
 using Domain;
 using Application.Activities.Commands;
+using Application.Activities.DTOs;
 
 namespace API.Controllers;
 
@@ -44,11 +45,11 @@ public class ActivitiesController() : BaseApiController
     }
 
     [HttpPost]
-    public async Task<ActionResult<string>> CreateActivity(Activity activity)
+    public async Task<ActionResult<string>> CreateActivity(CreateActivityDTO activityDto)
     {
         try
         {
-            return Ok(await Mediator.Send(new CreateActivity.Command{Activity = activity}));
+            return Ok(await Mediator.Send(new CreateActivity.Command{ActivityDTO = activityDto}));
         }
         catch (Exception ex)
         {
