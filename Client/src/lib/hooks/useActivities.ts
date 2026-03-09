@@ -1,9 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
+import { useLocation } from "react-router";
 
 // Custom class of hooks using ReactQuery relating to Activities controller
 export const useActivities = (id?: string) => {
     const queryClient = useQueryClient();
+    const location = useLocation();
 
     // Custom hook using ReactQuery to GetAll activities (useQuery for getting)
     const {data: activities, isPending} = useQuery({
@@ -11,7 +13,10 @@ export const useActivities = (id?: string) => {
     queryFn: async () => { // main queryFn being used
       const response = await agent.get<Activity[]>('/activities'); // baseurl stored in the agent class
       return response.data;
-    }
+    },
+    enabled: !id // do not get all activities if we know we are going somewhere that is only getting 1 specific activity
+      && location.pathname ==='/activities' // only execute when pathname is activitieis
+    // staleTime: 1000 * 60 * 5 // don't mark as stale until after 5 mins so we don't frequently load
   });
 
   // Custom hook using ReactQuery to Get a specific activity (useQuery for getting)

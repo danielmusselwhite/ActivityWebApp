@@ -1,9 +1,12 @@
-import { AppBar, Box, Button, Container, MenuItem, Toolbar, Typography } from '@mui/material'
-import { Group } from "@mui/icons-material"
-import { NavLink } from 'react-router'
+import { AppBar, Box, Button, Container, LinearProgress, MenuItem, Toolbar, Typography } from '@mui/material'
+import { Group, Height } from "@mui/icons-material"
 import MenuItemLink from '../app/shared/components/MenuItemLink'
+import { useStore } from '../../lib/stores/useStore';
+import { Observer } from 'mobx-react-lite';
 
 export default function NavBar() {
+    const {uiStore} = useStore();
+
   return (
         <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" sx={{backgroundImage: 'linear-gradient(135deg, #15635f 0%, #21ae84 69%, #20ac66 89%)'}}>
@@ -34,6 +37,16 @@ export default function NavBar() {
                         </MenuItem>
                 </Toolbar>
             </Container>
+
+            <Observer>
+                {() => uiStore.isLoading 
+                ? (
+                    <LinearProgress color="success" sx={{position:'relative', bottom:0, left:0, right:0, height:4}}/>
+                )
+                : (
+                    null
+                )}
+            </Observer>
         </AppBar>
         </Box>
   )
