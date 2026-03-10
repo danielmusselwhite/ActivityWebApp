@@ -3,6 +3,8 @@ using Application.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using AutoMapper;
+using FluentValidation;
+using Application.Activities.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +19,16 @@ builder.Services.AddDbContext<Persistence.AppDbContext>( options =>
 builder.Services.AddCors();
 
 #region Adding our custom services
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityDetails.Handler>());
+builder.Services.AddMediatR(x =>
+{
+    x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>();
+    x.RegisterServicesFromAssemblyContaining<GetActivityDetails.Handler>();
+    x.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+});
+
+
+// x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
+// builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityDetails.Handler>());
 #endregion
 
 // Registering auto mapper
@@ -26,6 +36,8 @@ builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddMaps(typeof(MappingProfiles).Assembly);
 });
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 
 var app = builder.Build();
 
