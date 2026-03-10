@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using AutoMapper;
 using FluentValidation;
 using Application.Activities.Validators;
+using API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,8 +39,12 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
+builder.Services.AddTransient<ExceptionMiddleware>();
 
 var app = builder.Build();
+
+// adding middleware
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://localhost:3000")); // Allow all requests from our React App (host urls)
 

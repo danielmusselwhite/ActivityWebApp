@@ -17,71 +17,32 @@ public class ActivitiesController() : BaseApiController
     [HttpGet]
     public async Task<ActionResult<List<Domain.Activity>>> GetActivities()
     {
-        try
-        {
-            return Ok(await Mediator.Send(new GetActivityList.Query()));
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return Ok(await Mediator.Send(new GetActivityList.Query()));
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Domain.Activity>> GetActivity(string id)
     {
-        try
-        {
-            return Ok(await Mediator.Send(new GetActivityDetails.Query{Id = id}));
-        }
-        catch (NotFoundException ex) 
-        {
-            return NotFound(ex.Message);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return Ok(await Mediator.Send(new GetActivityDetails.Query{Id = id}));
     }
 
     [HttpPost]
     public async Task<ActionResult<string>> CreateActivity(CreateActivityDTO activityDto)
     {
-        try
-        {
-            return Ok(await Mediator.Send(new CreateActivity.Command{ActivityDTO = activityDto}));
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return Ok(await Mediator.Send(new CreateActivity.Command{ActivityDTO = activityDto}));
     }
 
     [HttpPut]
     public async Task<ActionResult<string>> EditActivity(Activity activity)
     {
-        try
-        {
-            await Mediator.Send(new EditActivity.Command{Activity = activity});
-            return NoContent(); // no point sending anything back to client, as they know what has been updated
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await Mediator.Send(new EditActivity.Command{Activity = activity});
+        return NoContent(); // no point sending anything back to client, as they know what has been updated
     }
     
     [HttpDelete("{id}")]
     public async Task<ActionResult<string>> DeleteActivity(string id)
     {
-        try
-        {
-            await Mediator.Send(new DeleteActivity.Command{Id = id});
-            return Ok(); // no point sending anything back to client, as they know what has been updated
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        await Mediator.Send(new DeleteActivity.Command{Id = id});
+        return Ok(); // no point sending anything back to client, as they know what has been updated
     }
 }
