@@ -22,11 +22,11 @@ namespace API.Controllers
             }
             else if (result.Code == 404 || result.Value == null)
             {
-                return NotFound();
+                return NotFound(result.Error);
             }
             else // any other error code
             {
-                return BadRequest();
+                return BadRequest(result.Error);
             }
         }
     }

@@ -11,6 +11,7 @@ public class MappingProfiles : Profile
     {
         CreateMap<Activity, Activity>();
         CreateMap<CreateActivityDTO, Activity>().ReverseMap();
+        CreateMap<EditActivityDTO, Activity>().ReverseMap();
     }
 
 }

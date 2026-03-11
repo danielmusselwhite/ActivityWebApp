@@ -1,11 +1,13 @@
 using System;
-using Application.Errors;
+using System.Reflection.Metadata;
+using System.Text.Json;
+using Application.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Middleware;
 
-public class ExceptionMiddleware : IMiddleware
+public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger, IHostEnvironment env) : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -17,30 +19,25 @@ public class ExceptionMiddleware : IMiddleware
         {
             await HandleValidationException(context, ex);
         }
-        catch (NotFoundException ex) // if a notfound exception was raised
-        {
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
-
-            await context.Response.WriteAsJsonAsync(new ProblemDetails
-            {
-                Title = "Resource Not Found",
-                Detail = ex.Message,
-                Status = StatusCodes.Status404NotFound
-            });
-        }
         catch (Exception ex) // if a generic unhandled exception was raised
         {
-            Console.WriteLine(ex);
-
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-            await context.Response.WriteAsJsonAsync(new ProblemDetails
-            {
-                Title = "Server Error",
-                Detail = ex.Message,
-                Status = StatusCodes.Status500InternalServerError
-            });
+            await HandleException(context, ex);
         }
+    }
+
+    private async Task HandleException(HttpContext context, Exception ex)
+    {
+        logger.LogError(ex, ex.Message); // log the exception
+        context.Response.ContentType = "application/json"; // set the content type to json
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError; // set the status code to 500
+        
+        var response = env.IsDevelopment() // if we're in development, include the stack trace in the response, otherwise just return a generic error message
+            ? new AppException(context.Response.StatusCode, ex.Message, ex.StackTrace?.ToString())
+            : new AppException(context.Response.StatusCode, "Server Error", null);
+
+        var options = new JsonSerializerOptions{PropertyNamingPolicy = JsonNamingPolicy.CamelCase}; // set the json serializer to camel case
+        var json = JsonSerializer.Serialize(response, options); // serialize the response to json
+        await context.Response.WriteAsync(json); // write the json to the response
     }
 
     private static async Task HandleValidationException(HttpContext context, ValidationException ex)

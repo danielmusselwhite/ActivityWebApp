@@ -31,6 +31,10 @@ export default function NavBar() {
                         <MenuItemLink to='/counter'>
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >Counter</Typography>
                         </MenuItemLink>
+
+                        <MenuItemLink to='/errors'>
+                            <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >Errors</Typography>
+                        </MenuItemLink>
                     </Box>
                         <MenuItem>
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >ToDo - UserMenu</Typography>
