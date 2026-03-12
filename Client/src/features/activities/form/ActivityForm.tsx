@@ -1,44 +1,33 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import { type FormEvent } from "react";
 import { useActivities } from "../../../lib/hooks/useActivities";
 import { useNavigate, useParams } from "react-router";
 import LoadingFrag from "../../../app/app/shared/components/LoadingFrag";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { activitySchema, type ActivitySchema } from "../../../lib/schemas/activityScema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function ActivityForm() {
+
+    // Initialize the form with the ActivitySchema type we defined for the form
+    const { register, reset, handleSubmit, formState:{errors} } = useForm<ActivitySchema>({
+        mode: "onTouched", // Set the validation mode to "onTouched" to trigger validation when a field is touched.
+        resolver: zodResolver(activitySchema) // Use the zodResolver to integrate the Zod schema validation with react-hook-form, ensuring that the form data adheres to the defined schema before submission.
+    });
+
     const {id} = useParams();
     const {updateActivity, createActivity, activity, isLoadingActivity} = useActivities(id); // Reference the custom useActivities hook.
     const navigate = useNavigate();
 
-    // Handles submission of the MUI Box rendered as a real <form> element
-    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault(); // prevent the default submit behaviour (no refresh)
-        
-        // Create a FormData object referencing from the submitted form element (rendered from <Box component="form".../>)
-        const formData = new FormData(event.currentTarget);
-
-        // Convert FormData into a plain object
-        const formDataObject = Object.fromEntries(formData.entries());
-
-        // Creating a new Activity to store form values, where:
-        const data: Activity = {
-            ...(activity ?? {}), // passing over old values
-            ...formDataObject, // overwriting with new values
-            id: activity?.id // if actvity passed had an Id, set to it so we update instead of create
-        } as Activity; // must be done as otherwise missing fields in DTO which causes badrequest 400 on API
-
-        // If we are editing an activity that already exists, also add id into data so we don't do id insert
+    useEffect(() => {
         if(activity){
-            await updateActivity.mutateAsync(data);
-            navigate(`/activities/${data.id}`)
+            reset(activity); // Populate the form with the activity data when it is loaded.
         }
-        // else, we are creating an activity
-        else{
-            await createActivity.mutateAsync(data, {
-                onSuccess: (id) => { // after success, get the id returned from the API method that creates the activity 
-                    navigate(`/activities/${id}`)
-                }
-            });
-        }
+    }, [activity, reset]); // Reset the form with the activity data when it changes.
+
+    // Handles submission of the MUI Box rendered as a real <form> element
+    const onSubmit = (data: ActivitySchema) => {
+        console.log(data);
     }
 
     if(isLoadingActivity){
@@ -52,15 +41,37 @@ export default function ActivityForm() {
             <Typography variant="h5" gutterBottom color="primary">
                 {activity? "Edit Activity" :  "Create Activity"}
             </Typography>
-            <Box component="form" onSubmit={handleSubmit} display="flex" flexDirection="column" gap={3}>
-                <TextField name="title"  label="Title" defaultValue={activity?.title}/>
-                <TextField name="description"  label="Description" defaultValue={activity?.description} multiline={true} rows={3} />
-                <TextField name="category"  label="Category" defaultValue={activity?.category}/>
-                <TextField name="date"  label="Date" type="date" 
-                    defaultValue={activity?.date ? new Date(activity.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
+            <Box component="form" onSubmit={handleSubmit(onSubmit)} display="flex" flexDirection="column" gap={3}>
+                <TextField 
+                    {...register("title")} label="Title" defaultValue={activity?.title}
+                    error={!!errors.title}
+                    helperText={errors.title ? errors.title.message : ''} // Display the error message from Zod validation if there is an error for the title field.
                 />
-                <TextField name="city"  label="City" defaultValue={activity?.city}/>
-                <TextField name="venue"  label="Venue" defaultValue={activity?.venue}/>
+                <TextField 
+                    {...register("description")} label="Description" defaultValue={activity?.description} multiline={true} rows={3}
+                    error={!!errors.description}
+                    helperText={errors.description ? errors.description.message : ''} // Display the error message from Zod validation if there is an error for the description field.
+                />
+                <TextField 
+                    {...register("category")} label="Category" defaultValue={activity?.category}
+                    error={!!errors.category}
+                    helperText={errors.category ? errors.category.message : ''} // Display the error message from Zod validation if there is an error for the category field.
+                />
+                <TextField {...register("date")} label="Date" type="date" 
+                    defaultValue={activity?.date ? new Date(activity.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
+                    error={!!errors.date}
+                    helperText={errors.date ? errors.date.message : ''} // Display the error message from Zod validation if there is an error for the date field.
+                />
+                <TextField 
+                    {...register("city")} label="City" defaultValue={activity?.city} 
+                    error={!!errors.city} 
+                    helperText={errors.city ? errors.city.message : ''}
+                />
+                <TextField 
+                    {...register("venue")} label="Venue" defaultValue={activity?.venue} 
+                    error={!!errors.venue} 
+                    helperText={errors.venue ? errors.venue.message : ''}
+                />
                 <Box display="flex" justifyContent="end" gap={3}>
                     <Button onClick={() => navigate(`/activities/${activity?.id ?? ''}`)} color="inherit">Cancel</Button>
                     <Button type="submit" color="success" variant="contained" loading={updateActivity.isPending || createActivity.isPending}>Submit</Button>
