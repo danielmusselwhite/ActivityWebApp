@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { activitySchema, type ActivitySchema } from "../../../lib/schemas/activityScema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextInput from "../../../app/app/shared/components/TextInput";
+import SelectInput from "../../../app/app/shared/components/SelectInput";
+import { categoryOptions } from "./categoryOptions";
 
 export default function ActivityForm() {
 
@@ -45,7 +47,9 @@ export default function ActivityForm() {
             <Box component="form" onSubmit={handleSubmit(onSubmit)} display="flex" flexDirection="column" gap={3}>
                 <TextInput label="Title" control={control} name='title' />
                 <TextInput label="Description" control={control} name='description' multiline rows={4} />
-                <TextInput label="Category" control={control} name='category' />
+                
+                <SelectInput label="Category" control={control} name='category' items={categoryOptions} />
+
                 <TextInput label="Date" control={control} name='date' type="datetime-local" InputLabelProps={{ shrink: true }} />
                 <TextInput label="City" control={control} name='city' />
                 <TextInput label="Venue" control={control} name='venue' />
