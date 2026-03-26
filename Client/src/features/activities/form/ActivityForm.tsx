@@ -10,6 +10,8 @@ import TextInput from "../../../app/app/shared/components/TextInput";
 import SelectInput from "../../../app/app/shared/components/SelectInput";
 import { categoryOptions } from "./categoryOptions";
 import DateTimeInput from "../../../app/app/shared/components/DateTimeInput";
+import LocationInput from "../../../app/app/shared/components/LocationInput";
+import type { Activity } from "../../../lib/types";
 
 export default function ActivityForm() {
 
@@ -24,14 +26,48 @@ export default function ActivityForm() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        // Populate the form with the activity data when it is loaded.
         if(activity){
-            reset(activity); // Populate the form with the activity data when it is loaded.
+            reset({
+                ...activity,
+                location: {
+                    city: activity.city,
+                    venue: activity.venue,
+                    latitude: activity.latitude,
+                    longitude: activity.longitude
+                }
+            }); 
         }
     }, [activity, reset]); // Reset the form with the activity data when it changes.
 
     // Handles submission of the MUI Box rendered as a real <form> element
-    const onSubmit = (data: ActivitySchema) => {
-        console.log(data);
+    const onSubmit = async (data: ActivitySchema) => {
+
+        // Validate and coerce form data to proper types
+        const parsed = activitySchema.parse(data); // parsed is fully typed now
+        
+        const {location, ...rest} = parsed; // Destructure the form data to extract the necessary fields for creating or updating an activity.
+        const flattenedData = { ...rest, ...location }; // Flatten the location object into the main data object to match the expected structure for the API.
+
+        try{
+            // If there is an activity, we are in edit mode and should call the updateActivity mutation. If there is no activity, we are in create mode and should call the createActivity mutation.
+            if(activity){
+                updateActivity.mutate({...activity, ...flattenedData}, {
+                    onSuccess: () => navigate(`/activities/${activity.id}`) // Navigate to the activity details page after a successful update.
+                });
+            }
+            // Otherwise, we are in create mode and should call the createActivity mutation, which will create a new activity and navigate to its details page upon success.
+            else{
+                // add default id (0) and isCancelled(false) so it can be cast to Activity
+                const newActivity: Activity = { id: "", isCancelled: false, ...flattenedData, city: flattenedData.city || "" };
+                createActivity.mutate(newActivity, {
+                    onSuccess: (id) => navigate(`/activities/${id}`) // Navigate to the newly created activity's details page after a successful creation.
+                });
+            }
+        }
+        catch(error){
+            console.error("Error submitting activity form:", error); // Log any errors that occur during form submission.
+        }
     }
 
     if(isLoadingActivity){
@@ -49,12 +85,13 @@ export default function ActivityForm() {
                 <TextInput label="Title" control={control} name='title' />
                 <TextInput label="Description" control={control} name='description' multiline rows={4} />
                 
-                <SelectInput label="Category" control={control} name='category' items={categoryOptions} />
+                <Box display='flex' gap={3}>
+                    <SelectInput label="Category" control={control} name='category' items={categoryOptions} />
 
-                <DateTimeInput label="Date" control={control} name='date' />
+                    <DateTimeInput label="Date" control={control} name='date' />
+                </Box>
                 
-                <TextInput label="City" control={control} name='city' />
-                <TextInput label="Venue" control={control} name='venue' />
+                <LocationInput label="Enter the location" name="location" control={control} />
 
                 <Box display="flex" justifyContent="end" gap={3}>
                     <Button onClick={() => navigate(`/activities/${activity?.id ?? ''}`)} color="inherit">Cancel</Button>

@@ -21,7 +21,7 @@ export const useActivities = (id?: string) => {
 
   // Custom hook using ReactQuery to Get a specific activity (useQuery for getting)
   const {data: activity, isLoading: isLoadingActivity} = useQuery({
-    queryKey: ['acitivites', id], // also pass in the id as a unique key as we are cache specifically that activitys info
+    queryKey: ['activities', id], // also pass in the id as a unique key as we are cache specifically that activitys info
     queryFn: async () => {
       const response = await agent.get<Activity>(`/activities/${id}`); 
       return response.data;
