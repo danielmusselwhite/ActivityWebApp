@@ -1,4 +1,6 @@
 using System;
+using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence;
 
@@ -7,8 +9,42 @@ namespace Persistence;
 /// </summary>
 public class DbInitializer
 {
-    public static async Task SeedData(AppDbContext context)
+    public static async Task SeedData(AppDbContext context, UserManager<User> userManager)
     {
+        #region Seed Users
+        if(!userManager.Users.Any())
+        {
+            var users = new List<User>
+            {
+                new User
+                {
+                    DisplayName = "Bob",
+                    UserName = "bob@test.com",
+                    Email = "bob@test.com"
+                },
+                new User
+                {
+                    DisplayName = "Tom",
+                    UserName = "tom@test.com",
+                    Email = "tom@test.com"
+                },
+                new User
+                {
+                    DisplayName = "Jane",
+                    UserName = "jane@test.com",
+                    Email = "jane@test.com"
+                }
+            };
+
+            foreach(var user in users)
+            {
+                await userManager.CreateAsync(user, "Pa$$w0rd");
+            }
+        }
+
+        #endregion
+
+        #region Seed Activities
         // check if there are any activities in the database, if there are, then return as we only want to seed data if the database is empty
         if (context.Activities.Any()) return;
 
@@ -122,8 +158,9 @@ public class DbInitializer
                 Longitude = -0.781404
             }
         };
+        #endregion
 
-        // add the activities to the database and save the changes
+        // add the seeded data to the database and save the changes
         await context.Activities.AddRangeAsync(activities);
         await context.SaveChangesAsync();
     }

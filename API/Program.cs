@@ -1,6 +1,8 @@
 using Application.Activities.Queries;
 using Application.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using AutoMapper;
 using FluentValidation;
 using Application.Activities.Validators;
 using API.Middleware;
@@ -41,6 +43,7 @@ builder.Services.AddAutoMapper(cfg =>
 builder.Services.AddValidatorsFromAssemblyContaining<CreateActivityValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
 
+
 // Adding Identity API Endpoints for User registration and login, and configuring password requirements
 builder.Services.AddIdentityApiEndpoints<User>(opt =>
 {
@@ -64,17 +67,18 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapGroup("api").MapIdentityApi<User>(); // Map the endpoints for the Identity API, which will handle user registration and login
 
-#region service locator pattern to get an instance of the AppDbContext and seed the database with initial data
+#region service locator pattern to get an instance of the AppDbContext & UserManager and seed the database with initial data
 // we need to create a scope to get an instance of the AppDbContext, as it is registered as a scoped service, and we are in the Program.cs file which is the entry point of the application, so we can't use dependency injection to get an instance of the AppDbContext, so we need to create a scope and then get an instance of the AppDbContext from the service provider, then we can apply any pending migrations to the database and seed the database with initial data 
 using var scope = app.Services.CreateScope(); 
 var services = scope.ServiceProvider;
 try
 {
-    // get an instance of the AppDbContext and apply any pending migrations to the database, then seed the database with initial data
+    // apply any pending migrations to the database, then seed the database with initial data
     var context = services.GetRequiredService<Persistence.AppDbContext>();
+    var userManager = services.GetRequiredService<UserManager<User>>();
     await context.Database.MigrateAsync();
     #if DEBUG
-    await Persistence.DbInitializer.SeedData(context);
+    await Persistence.DbInitializer.SeedData(context, userManager);
     #endif
 }
 catch (Exception ex)
