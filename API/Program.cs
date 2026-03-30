@@ -65,7 +65,7 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>(); // adding middleware for API requests
-app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://localhost:3000")); // Allow all requests from our React App (host urls)
+app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000", "https://localhost:3000")); // Allow all requests from our React App (host urls)
 
 // Adding identity API requirements for authentication and authorization
 app.UseAuthentication();
