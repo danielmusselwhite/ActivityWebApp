@@ -10,6 +10,7 @@ using Application.Activities.Commands;
 using Application.Activities.DTOs;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Application.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers;
 

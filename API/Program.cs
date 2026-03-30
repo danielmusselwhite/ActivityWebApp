@@ -8,11 +8,19 @@ using Application.Activities.Validators;
 using API.Middleware;
 using Domain;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 #region  Add services to the container.
-builder.Services.AddControllers();
+
+// Adding controllers with a global authorization policy, which will require all API endpoints to be accessed by authenticated users
+builder.Services.AddControllers(opt =>
+{
+    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+    opt.Filters.Add(new AuthorizeFilter(policy));
+});
 builder.Services.AddDbContext<Persistence.AppDbContext>( options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
