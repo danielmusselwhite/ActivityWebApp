@@ -3,6 +3,8 @@ import type { LoginSchema } from "../schemas/loginSchema"
 import agent from "../api/agent"
 import type { User } from "../types";
 import { useNavigate } from 'react-router';
+import type { RegisterSchema } from "../schemas/registerSchema";
+import { toast } from "react-toastify";
 
 export const useAccount = () => {
     const queryClient = useQueryClient();
@@ -30,6 +32,16 @@ export const useAccount = () => {
         }
     })
 
+    // Mutation to Register user
+    const registerUser = useMutation({
+        mutationFn: async (creds: RegisterSchema) => {
+            await agent.post('/account/register', creds); // register endpoint will set httpOnly cookie with the token, so no need to handle token in client, just need to include credentials in request and let browser handle the cookie
+        },
+        onSuccess: async() => {
+            toast.success('Registration successful, you can now login');
+        }
+    });
+
     // Query to get current user info based on the token in the cookie
     const {data: currentUser, isLoading: loadingUserInfo} = useQuery({
         queryKey: ['user'],
@@ -40,5 +52,5 @@ export const useAccount = () => {
         enabled: !queryClient.getQueryData(['user']) // only run this query if we don't already have user data in cache, this is to prevent unnecessary requests to the server on app load if we already have user data from a previous session
     })
 
-    return { loginUser, logoutUser, currentUser, loadingUserInfo }
+    return { loginUser, logoutUser, registerUser, currentUser, loadingUserInfo }
 }

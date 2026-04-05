@@ -9,28 +9,21 @@ import TextInput from "../../app/app/shared/components/TextInput";
 import Box from "@mui/material/Box";
 import { useNavigate, useLocation } from "react-router";
 import { useAccount } from "../../lib/hooks/useAccounts";
+import { registerSchema, type RegisterSchema } from "../../lib/schemas/registerSchema";
 
-
-
-export default function Login(){
-    const {loginUser} = useAccount();
+export default function Register(){
+    const {registerUser} = useAccount();
 
     const navigate = useNavigate();
     const location = useLocation();
 
-    const {control, handleSubmit, formState: {isValid, isSubmitting}} = useForm<LoginSchema>({
+    const {control, handleSubmit, formState: {isValid, isSubmitting}} = useForm<RegisterSchema>({
         mode: 'onTouched',
-        resolver: zodResolver(loginSchema)
+        resolver: zodResolver(registerSchema)
     });
 
-    const onSubmit = async (data: LoginSchema) => {
-        await loginUser.mutateAsync(data,
-            {
-                // navigate to activities page on successful login
-                onSuccess: () => {
-                    navigate(location.state?.from || '/activities'); // navigate to the page the user was trying to access before being redirected to login, or to activities page if there is no such page
-                }
-            });
+    const onSubmit = async (data: RegisterSchema) => {
+        await registerUser.mutateAsync(data);
     }
 
     return (
@@ -46,15 +39,16 @@ export default function Login(){
             }}>
             <Box display='flex' alignItems='center' justifyContent='center' gap={2} color='secondary.main'>
                 <LockOpen fontSize='large' color='secondary' />
-                <Typography variant='h4'>Login</Typography>
+                <Typography variant='h4'>Register</Typography>
             </Box>
             <TextInput label='Email' name='email' control={control} />
+            <TextInput label='Display Name' name='displayName' control={control} />
             <TextInput label='Password' name='password' control={control} type='password' />
             <Button type='submit' variant='contained' color='primary' disabled={!isValid || isSubmitting}>
-                Login
+                Register
             </Button>
             <Typography sx={{textAlign: 'center'}}>
-                Don't have an account? <Button onClick={() => navigate('/register')}>Sign Up</Button>
+                Already have an account? <Button onClick={() => navigate('/login')}>Login</Button>
             </Typography>
         </Paper>
     )
