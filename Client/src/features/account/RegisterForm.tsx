@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { LockOpen } from "@mui/icons-material";
 import TextInput from "../../app/app/shared/components/TextInput";
 import Box from "@mui/material/Box";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate } from "react-router";
 import { useAccount } from "../../lib/hooks/useAccounts";
 import { registerSchema, type RegisterSchema } from "../../lib/schemas/registerSchema";
 
@@ -15,15 +15,27 @@ export default function Register(){
     const {registerUser} = useAccount();
 
     const navigate = useNavigate();
-    const location = useLocation();
 
-    const {control, handleSubmit, formState: {isValid, isSubmitting}} = useForm<RegisterSchema>({
+    const {control, handleSubmit, setError, formState: {isValid, isSubmitting}} = useForm<RegisterSchema>({
         mode: 'onTouched',
         resolver: zodResolver(registerSchema)
     });
 
     const onSubmit = async (data: RegisterSchema) => {
-        await registerUser.mutateAsync(data);
+        await registerUser.mutateAsync(data, {
+            onError: (error) => {
+                
+                // set the error message for each field 
+                if(Array.isArray(error))
+                {
+                    error.forEach((err) => {
+                        if (err.includes('Email')) setError('email', {message: err});
+                        if (err.includes('Password')) setError('password', {message: err});
+                        if (err.includes('Display Name') || err.includes('DisplayName')) setError('displayName', {message: err});
+                    });
+                }
+            }
+        });
     }
 
     return (
