@@ -5,6 +5,7 @@ import { useStore } from '../../lib/stores/useStore';
 import { Observer } from 'mobx-react-lite';
 import { useAccount } from '../../lib/hooks/useAccounts';
 import Login from '../../features/account/LoginForm';
+import UserMenu from './UserMenu';
 
 export default function NavBar() {
     const {uiStore} = useStore();
@@ -42,7 +43,7 @@ export default function NavBar() {
                     <Box display='flex' alignItems='center' gap={2}>
                         {currentUser ? 
                         (
-                            <Typography variant='h6'>Hello {currentUser.displayName}</Typography>
+                            <UserMenu />
                         ) : 
                         (
                             <>
