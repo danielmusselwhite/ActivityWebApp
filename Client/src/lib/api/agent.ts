@@ -13,7 +13,8 @@ const sleep = (delay: number) => {
 // Create an axios instance so configuration is centralized
 // baseURL comes from environment variable (Vite syntax)
 const agent = axios.create({
-    baseURL: import.meta.env.VITE_API_URL // "https://localhost:5001/api"
+    baseURL: import.meta.env.VITE_API_URL, // "https://localhost:5001/api"
+    withCredentials: true
 });
 
 agent.interceptors.request.use(config => {

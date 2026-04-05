@@ -1,5 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
-import { useAccount } from "../../lib/hooks/useAcconts";
+import { useAccount } from "../../lib/hooks/useAccounts";
 import { loginSchema, type LoginSchema } from "../../lib/schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import Paper from "@mui/material/Paper";
