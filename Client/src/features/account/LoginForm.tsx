@@ -1,5 +1,4 @@
 import { useForm, Controller } from "react-hook-form";
-import { useAccount } from "../../lib/hooks/useAccounts";
 import { loginSchema, type LoginSchema } from "../../lib/schemas/loginSchema";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import Paper from "@mui/material/Paper";
@@ -8,10 +7,16 @@ import Typography from "@mui/material/Typography";
 import { LockOpen } from "@mui/icons-material";
 import TextInput from "../../app/app/shared/components/TextInput";
 import Box from "@mui/material/Box";
+import { useNavigate, useLocation } from "react-router";
+import { useAccount } from "../../lib/hooks/useAccounts";
+
 
 
 export default function Login(){
     const {loginUser} = useAccount();
+
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const {control, handleSubmit, formState: {isValid, isSubmitting}} = useForm<LoginSchema>({
         mode: 'onTouched',
@@ -19,7 +24,13 @@ export default function Login(){
     });
 
     const onSubmit = async (data: LoginSchema) => {
-        await loginUser.mutateAsync(data);
+        await loginUser.mutateAsync(data,
+            {
+                // navigate to activities page on successful login
+                onSuccess: () => {
+                    navigate(location.state?.from || '/activities'); // navigate to the page the user was trying to access before being redirected to login, or to activities page if there is no such page
+                }
+            });
     }
 
     return (

@@ -15,7 +15,6 @@ export const useAccount = () => {
         },
         onSuccess: async() => {
             await queryClient.invalidateQueries({ queryKey: ['user'] }) // done so it invalidates the queryKey user so we will have to redo the request to get the user data
-            await navigate('/activities'); // navigate to activities page on successful login
         }
     });
 
@@ -32,7 +31,7 @@ export const useAccount = () => {
     })
 
     // Query to get current user info based on the token in the cookie
-    const {data: currentUser} = useQuery({
+    const {data: currentUser, isLoading: loadingUserInfo} = useQuery({
         queryKey: ['user'],
         queryFn: async () => {
             const response = await agent.get<User>('/account/user-info'); // endpoint to get current user info based on the token in the cookie, will return 401 if not authenticated
@@ -41,5 +40,5 @@ export const useAccount = () => {
         enabled: !queryClient.getQueryData(['user']) // only run this query if we don't already have user data in cache, this is to prevent unnecessary requests to the server on app load if we already have user data from a previous session
     })
 
-    return { loginUser, logoutUser, currentUser }
+    return { loginUser, logoutUser, currentUser, loadingUserInfo }
 }

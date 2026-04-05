@@ -9,19 +9,26 @@ import TestErrors from '../../features/errors/TestErrors';
 import NotFound from '../../features/errors/NotFound';
 import ServerError from '../../features/errors/ServerError';
 import LoginForm from '../../features/account/LoginForm';
+import RequireAuth from './RequireAuth';
 
 
 export const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
+
         children: [
-            {path: '', element: <HomePage /> },
-            {path: 'activities', element: <ActivityDashboard /> },
-            {path: 'activities/:id', element: <ActivityDetailPage /> }, //':id is param string in url
-            {path: 'manage/:id', element: <ActivityForm /> }, //':id is param string in url
-            {path: 'createActivity', element: <ActivityForm key='create'/> }, // key so that it resets if re-navigated to (eg from one instance of create activity to another)
-            {path: 'counter', element: <Counter /> }, 
+            
+            // auth requiring routes nested inside here
+            {element: <RequireAuth />, children: [
+                {path: 'activities', element: <ActivityDashboard /> },
+                {path: 'activities/:id', element: <ActivityDetailPage /> }, //':id is param string in url
+                {path: 'manage/:id', element: <ActivityForm /> }, //':id is param string in url
+                {path: 'createActivity', element: <ActivityForm key='create'/> }, // key so that it resets if re-navigated to (eg from one instance of create activity to another)
+            ]},
+
+            // public routes
+            {path: '', element: <HomePage /> },{path: 'counter', element: <Counter /> }, 
             {path: 'errors', element: <TestErrors /> }, 
             {path: 'not-found', element: <NotFound /> }, 
             {path: 'server-error', element: <ServerError /> }, 

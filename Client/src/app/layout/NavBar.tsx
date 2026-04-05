@@ -27,11 +27,7 @@ export default function NavBar() {
                         <MenuItemLink to='/activities'>
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase">Activities</Typography>
                         </MenuItemLink>
-
-                        <MenuItemLink to='/createActivity'>
-                            <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >Create Activity</Typography>
-                        </MenuItemLink>
-
+                        
                         <MenuItemLink to='/counter'>
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >Counter</Typography>
                         </MenuItemLink>
