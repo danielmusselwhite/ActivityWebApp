@@ -11,8 +11,14 @@ export type Activity = {
   longitude: number;
 };
 
-//#region LocationIQ Types corresponding to the API response
+export type User = {
+  id: string
+  email: string
+  displayName: string
+  imageUrl?: string
+}
 
+//#region LocationIQ Types corresponding to the API response
 export type LocationIQSuggestion = {
   place_id: string;
   osm_id: string;
@@ -49,3 +55,5 @@ export type LocationIQAddress = {
   country?: string;
   country_code?: string;
 }
+
+//#endregion

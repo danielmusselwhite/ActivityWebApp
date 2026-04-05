@@ -3,9 +3,13 @@ import { Group, Height } from "@mui/icons-material"
 import MenuItemLink from '../app/shared/components/MenuItemLink'
 import { useStore } from '../../lib/stores/useStore';
 import { Observer } from 'mobx-react-lite';
+import { useAccount } from '../../lib/hooks/useAccounts';
+import Login from '../../features/account/LoginForm';
+import UserMenu from './UserMenu';
 
 export default function NavBar() {
     const {uiStore} = useStore();
+    const {currentUser} = useAccount();
 
   return (
         <Box sx={{ flexGrow: 1 }}>
@@ -23,11 +27,7 @@ export default function NavBar() {
                         <MenuItemLink to='/activities'>
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase">Activities</Typography>
                         </MenuItemLink>
-
-                        <MenuItemLink to='/createActivity'>
-                            <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >Create Activity</Typography>
-                        </MenuItemLink>
-
+                        
                         <MenuItemLink to='/counter'>
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >Counter</Typography>
                         </MenuItemLink>
@@ -36,9 +36,18 @@ export default function NavBar() {
                             <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >Errors</Typography>
                         </MenuItemLink>
                     </Box>
-                        <MenuItem>
-                            <Typography fontSize="1.2rem" fontWeight="bold" textTransform="uppercase" >ToDo - UserMenu</Typography>
-                        </MenuItem>
+                    <Box display='flex' alignItems='center' gap={2}>
+                        {currentUser ? 
+                        (
+                            <UserMenu />
+                        ) : 
+                        (
+                            <>
+                                <MenuItemLink to='/login'>Login</MenuItemLink>
+                                <MenuItemLink to='/register'>Register</MenuItemLink>                            
+                            </>  
+                        )}
+                    </Box>
                 </Toolbar>
             </Container>
 

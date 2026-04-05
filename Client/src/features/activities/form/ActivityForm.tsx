@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useActivities } from "../../../lib/hooks/useActivities";
 import { useNavigate, useParams } from "react-router";
-import LoadingFrag from "../../../app/app/shared/components/LoadingFrag";
+import SimpleFrag from "../../../app/app/shared/components/SimpleFrag";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { activitySchema, type ActivitySchema } from "../../../lib/schemas/activityScema";
@@ -72,7 +72,7 @@ export default function ActivityForm() {
 
     if(isLoadingActivity){
         return (
-            <LoadingFrag />
+            <SimpleFrag message="Loading activity..." />
         )
     }
 
