@@ -1,15 +1,22 @@
 import { Box } from '@mui/material'
 import ActivityCard from '../ActivityCard'
 import { useActivities } from '../../../lib/hooks/useActivities';
-import LoadingFrag from '../../../app/app/shared/components/LoadingFrag';
+import SimpleFrag from '../../../app/app/shared/components/SimpleFrag';
+import { useAccount } from '../../../lib/hooks/useAccounts';
 
 export default function ActivityList() {
-  const {activities, isPending} = useActivities(); // using our custom hook to get activities and ispending state
-  
-  if(!activities || isPending)
+  const {activities, isLoading} = useActivities(); // using our custom hook to get activities and ispending state
+
+  if(isLoading)
   {
     return (
-        <LoadingFrag />
+        <SimpleFrag message="Loading activities..." />
+    )
+  }
+  else if(!activities || activities.length === 0)
+  {
+    return (
+        <SimpleFrag message="No activities found." />
     )
   }
   else{
