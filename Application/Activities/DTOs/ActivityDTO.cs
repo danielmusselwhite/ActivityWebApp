@@ -1,15 +1,18 @@
 using System;
+using Application.Profiles.DTOs;
 
-namespace Domain;
+namespace Application.Activities.DTOs;
 
-public class Activity
+public class ActivityDTO
 {
-    public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string Id { get; set; }
     public required string Title { get; set; }
     public required string Description { get; set; }
     public DateTime Date { get; set; }
     public required string Category { get; set; }
     public bool IsCancelled { get; set; }
+    public required string HostDisplayName {get; set;}
+    public required string HostId { get; set; }
 
     #region location props
     public required string City { get; set; }
@@ -19,6 +22,6 @@ public class Activity
     #endregion
 
     #region navigation props
-    public ICollection<ActivityAttendee> Attendees { get; set; } = new List<ActivityAttendee>();
+    public ICollection<UserProfile> Attendees { get; set; } = new List<UserProfile>();
     #endregion
 }
