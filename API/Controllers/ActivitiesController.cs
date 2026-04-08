@@ -17,13 +17,13 @@ namespace API.Controllers;
 public class ActivitiesController() : BaseApiController
 {
     [HttpGet]
-    public async Task<ActionResult<List<Domain.Activity>>> GetActivities()
+    public async Task<ActionResult<List<Activity>>> GetActivities()
     {
         return Ok(await Mediator.Send(new GetActivityList.Query()));
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Domain.Activity>> GetActivity(string id)
+    public async Task<ActionResult<ActivityDTO>> GetActivity(string id)
     {
         return HandleResult(await Mediator.Send(new GetActivityDetails.Query{Id = id}));
     }
