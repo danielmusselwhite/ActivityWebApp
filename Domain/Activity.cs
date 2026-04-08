@@ -17,4 +17,8 @@ public class Activity
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     #endregion
+
+    #region navigation props
+    public ICollection<ActivityAttendee> Attendees { get; set; } = new List<ActivityAttendee>();
+    #endregion
 }
