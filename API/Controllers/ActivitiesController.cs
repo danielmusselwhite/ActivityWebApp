@@ -45,4 +45,10 @@ public class ActivitiesController() : BaseApiController
     {
         return HandleResult(await Mediator.Send(new DeleteActivity.Command{Id = id}));
     }
+
+    [HttpPost("{id}/attend")]
+    public async Task<ActionResult<Unit>> Attend(string id)
+    {
+        return HandleResult(await Mediator.Send(new UpdateAttendance.Command{Id = id}));
+    }
 }
