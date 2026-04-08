@@ -10,6 +10,8 @@ using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Application.Interfaces;
+using Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +43,8 @@ builder.Services.AddMediatR(x =>
 // x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>());
 // builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetActivityDetails.Handler>());
 #endregion
+
+builder.Services.AddScoped<IUserAccessor, UserAccessor>(); // Registering our custom service for accessing the current user, which will be used in our API endpoints to get the current user's information and perform actions on behalf of the user
 
 // Registering auto mapper
 builder.Services.AddAutoMapper(cfg =>
