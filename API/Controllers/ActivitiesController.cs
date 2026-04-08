@@ -34,13 +34,16 @@ public class ActivitiesController() : BaseApiController
         return HandleResult(await Mediator.Send(new CreateActivity.Command{ActivityDTO = activityDto}));
     }
 
-    [HttpPut]
-    public async Task<ActionResult<string>> EditActivity(EditActivityDTO activity)
+    [HttpPut("{id}")]
+    [Authorize(Policy = "IsActivityHost")] // This will ensure that only the host of the activity can edit the activity
+    public async Task<ActionResult<string>> EditActivity(string id, EditActivityDTO activity)
     {
+        activity.Id = id;
         return HandleResult(await Mediator.Send(new EditActivity.Command{ActivityDTO = activity}));
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Policy = "IsActivityHost")] // This will ensure that only the host of the activity can delete the activity
     public async Task<ActionResult<string>> DeleteActivity(string id)
     {
         return HandleResult(await Mediator.Send(new DeleteActivity.Command{Id = id}));

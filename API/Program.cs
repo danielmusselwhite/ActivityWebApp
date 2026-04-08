@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Application.Interfaces;
-using Infrastructure;
+using Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,7 +64,18 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<Persistence.AppDbContext>();
 
+#region Adding authentication and authorization services
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("IsActivityHost", policy =>
+    {
+        policy.AddRequirements(new IsHostRequirement());
+    });
+});
+builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>(); // Registering our custom authorization handler for the "IsActivityHost" policy, which will check if the current user is the host of the activity they are trying to access
+
 builder.Services.AddAuthorization();
+#endregion
 
 var app = builder.Build();
 
