@@ -51,7 +51,7 @@ export default function ActivityCard({activity}: Props) {
                     </Box>
                     <Place sx={{ml: 3, mr: 1}}/>
                     <Typography variant="body2">{activity.venue}</Typography>
-                <Chip label={activity.category} variant="outlined" />
+                    <Chip label={activity.category} variant="outlined" sx={{ml: 2}}/>
                 </Box>
 
                 <Divider />
