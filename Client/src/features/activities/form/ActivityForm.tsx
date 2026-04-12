@@ -1,16 +1,16 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useActivities } from "../../../lib/hooks/useActivities";
 import { useNavigate, useParams } from "react-router";
-import SimpleFrag from "../../../app/app/shared/components/SimpleFrag";
+import SimpleFrag from "../../../app/shared/components/SimpleFrag";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { activitySchema, type ActivitySchema } from "../../../lib/schemas/activityScema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import TextInput from "../../../app/app/shared/components/TextInput";
-import SelectInput from "../../../app/app/shared/components/SelectInput";
+import TextInput from "../../../app/shared/components/TextInput";
+import SelectInput from "../../../app/shared/components/SelectInput";
 import { categoryOptions } from "./categoryOptions";
-import DateTimeInput from "../../../app/app/shared/components/DateTimeInput";
-import LocationInput from "../../../app/app/shared/components/LocationInput";
+import DateTimeInput from "../../../app/shared/components/DateTimeInput";
+import LocationInput from "../../../app/shared/components/LocationInput";
 import type { Activity } from "../../../lib/types";
 
 export default function ActivityForm() {

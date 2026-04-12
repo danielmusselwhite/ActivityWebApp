@@ -1,7 +1,7 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from "@mui/material"
 import { useNavigate, useParams } from "react-router";
 import { useActivities } from "../../../lib/hooks/useActivities";
-import SimpleFrag from "../../../app/app/shared/components/SimpleFrag";
+import SimpleFrag from "../../../app/shared/components/SimpleFrag";
 import ActivityDetailsHeader from "./ActivityDetailsHeader";
 import ActivityDetailsInfo from "./ActivityDetailsInfo";
 import ActivityDetailsChat from "./ActivityDetailsChat";
@@ -35,7 +35,7 @@ export default function ActivityDetailPage() {
             <ActivityDetailsChat />
           </Grid>
           <Grid size={4}>
-            <ActivityDetailsSidebar />
+            <ActivityDetailsSidebar activity={activity} />
           </Grid>
       </Grid>
     )

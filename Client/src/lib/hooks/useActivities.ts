@@ -19,7 +19,17 @@ export const useActivities = (id?: string) => {
     },
     enabled: !id
       && location.pathname ==='/activities' 
-      && !!currentUser
+      && !!currentUser,
+    
+    select: data => { // Transform the data to include isHost and isGoing properties
+      return data.map(activity => {
+        return {
+          ...activity,
+          isHost: currentUser?.id === activity.hostId,
+          isGoing: activity.attendees.some(a => a.id === currentUser?.id)
+        }
+      })
+    }
   });
 
   // Custom hook using ReactQuery to Get a specific activity (useQuery for getting)
@@ -30,7 +40,14 @@ export const useActivities = (id?: string) => {
       return response.data;
     },
     enabled: !!id
-     && !!currentUser
+     && !!currentUser,
+    select: data => { // Transform the data to include isHost and isGoing properties
+      return {
+        ...data,
+        isHost: currentUser?.id === data.hostId,
+        isGoing: data.attendees.some(a => a.id === currentUser?.id)
+      }
+    }
   })
 
   // Custom hook using ReactQuery to Update Information (useMutation for manipulation)
@@ -74,7 +91,50 @@ export const useActivities = (id?: string) => {
       })
     },
     onError: (error) => {
-      console.error("Failed to create activity:", error);
+      console.error("Failed to delete activity:", error);
+    }
+  })
+
+  const updateAttendance = useMutation({
+    mutationFn: async (id: string) => {
+      await agent.post(`/activities/${id}/attend`)
+    },
+    onMutate:
+      async (activityId: string) => {
+        await queryClient.cancelQueries({ queryKey: ['activities', activityId] });// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+
+        const prevActivity = queryClient.getQueryData<Activity>(['activities', activityId]); // Snapshot the previous value from cache
+
+        //#region Optimistically update the cache to reflect the attendance change immediately
+        queryClient.setQueryData<Activity>(['activities', activityId], oldActivity => {
+          if (!oldActivity || !currentUser) return oldActivity; // If no activity found, return the old value
+
+          const isHost = oldActivity.hostId === currentUser?.id;
+          const isAttending = oldActivity.attendees.some(a => a.id === currentUser?.id);
+
+          return {
+            ...oldActivity,
+            isCancelled: isHost ? !oldActivity.isCancelled : oldActivity.isCancelled, // Toggle cancellation if host
+            attendees: isAttending
+              ? isHost
+                ? oldActivity.attendees // If host is toggling, keep attendees the same
+                : oldActivity.attendees.filter(a => a.id !== currentUser.id) // If attendee is toggling, remove them from attendees
+              : [...oldActivity.attendees, { // If not attending, add them to attendees
+                  id: currentUser.id,
+                  displayName: currentUser.displayName,
+                  imageUrl: currentUser.imageUrl
+                }]
+            }
+        });
+        //#endregion
+
+        return { prevActivity }; // Return context with the previous activity for potential rollback
+      } ,
+    onError: (error, activityId, context) => {
+      console.error("Failed to update attendance:", error);
+      if (context?.prevActivity) {
+        queryClient.setQueryData<Activity>(['activities', activityId], context.prevActivity); // Rollback to previous activity on error
+      }
     }
   })
 
@@ -85,6 +145,7 @@ export const useActivities = (id?: string) => {
     createActivity,
     deleteActivity,
     activity,
-    isLoadingActivity
+    isLoadingActivity,
+    updateAttendance
   }
 }

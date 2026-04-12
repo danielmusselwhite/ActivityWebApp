@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAccount } from "../../lib/hooks/useAccounts";
-import SimpleFrag from "../app/shared/components/SimpleFrag";
+import SimpleFrag from "../../app/shared/components/SimpleFrag";
 
 
 export default function RequireAuth() {
