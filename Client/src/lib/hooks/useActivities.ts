@@ -19,7 +19,17 @@ export const useActivities = (id?: string) => {
     },
     enabled: !id
       && location.pathname ==='/activities' 
-      && !!currentUser
+      && !!currentUser,
+    
+    select: data => { // Transform the data to include isHost and isGoing properties
+      return data.map(activity => {
+        return {
+          ...activity,
+          isHost: currentUser?.id === activity.hostId,
+          isGoing: activity.attendees.some(a => a.id === currentUser?.id)
+        }
+      })
+    }
   });
 
   // Custom hook using ReactQuery to Get a specific activity (useQuery for getting)
@@ -30,7 +40,14 @@ export const useActivities = (id?: string) => {
       return response.data;
     },
     enabled: !!id
-     && !!currentUser
+     && !!currentUser,
+    select: data => { // Transform the data to include isHost and isGoing properties
+      return {
+        ...data,
+        isHost: currentUser?.id === data.hostId,
+        isGoing: data.attendees.some(a => a.id === currentUser?.id)
+      }
+    }
   })
 
   // Custom hook using ReactQuery to Update Information (useMutation for manipulation)
@@ -74,7 +91,7 @@ export const useActivities = (id?: string) => {
       })
     },
     onError: (error) => {
-      console.error("Failed to create activity:", error);
+      console.error("Failed to delete activity:", error);
     }
   })
 
