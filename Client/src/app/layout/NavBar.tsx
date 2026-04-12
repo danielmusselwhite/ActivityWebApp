@@ -1,6 +1,6 @@
 import { AppBar, Box, Button, Container, LinearProgress, MenuItem, Toolbar, Typography } from '@mui/material'
 import { Group, Height } from "@mui/icons-material"
-import MenuItemLink from '../app/shared/components/MenuItemLink'
+import MenuItemLink from '../../app/shared/components/MenuItemLink'
 import { useStore } from '../../lib/stores/useStore';
 import { Observer } from 'mobx-react-lite';
 import { useAccount } from '../../lib/hooks/useAccounts';

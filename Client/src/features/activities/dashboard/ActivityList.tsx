@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import ActivityCard from '../ActivityCard'
 import { useActivities } from '../../../lib/hooks/useActivities';
-import SimpleFrag from '../../../app/app/shared/components/SimpleFrag';
+import SimpleFrag from '../../../app/shared/components/SimpleFrag';
 import { useAccount } from '../../../lib/hooks/useAccounts';
 
 export default function ActivityList() {

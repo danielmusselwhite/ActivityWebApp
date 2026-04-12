@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { LockOpen } from "@mui/icons-material";
-import TextInput from "../../app/app/shared/components/TextInput";
+import TextInput from "../../app/shared/components/TextInput";
 import Box from "@mui/material/Box";
 import { useNavigate, useLocation } from "react-router";
 import { useAccount } from "../../lib/hooks/useAccounts";
