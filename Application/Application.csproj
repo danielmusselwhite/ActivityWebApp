@@ -25,6 +25,7 @@
     <Folder Include="Activities\Commands\" />
     <Folder Include="Activities\Queries\" />
     <Folder Include="Errors\" />
+    <Folder Include="Profiles\Commands\" />
   </ItemGroup>
 
 </Project>
