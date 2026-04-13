@@ -4,6 +4,7 @@ using Application.Core;
 using Application.Interfaces;
 using Domain;
 using FluentValidation;
+using Infrastructure.Photos;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +32,9 @@ builder.Services.AddDbContext<Persistence.AppDbContext>(options =>
 // Add Cross-Origin Resource Sharing (CORS) services.
 builder.Services.AddCors();
 
+// Configure mapping of Cloudinary settings from appsettings.json.
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+
 // Add MediatR for handling CQRS pattern.
 builder.Services.AddMediatR(x =>
 {
@@ -51,8 +55,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<Application.Activities.Vali
 // Add custom middleware for exception handling.
 builder.Services.AddTransient<ExceptionMiddleware>();
 
-// Add custom service for accessing the current user.
+// Add custom services
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 #endregion
 
 #region Identity Services

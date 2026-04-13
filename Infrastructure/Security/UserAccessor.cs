@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Application.Interfaces;
 using Domain;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Infrastructure.Security;
@@ -20,6 +21,14 @@ public class UserAccessor(IHttpContextAccessor httpContextAccessor, AppDbContext
     public string GetUserId()
     {
         return httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier) // Get the user ID from the claims
+            ?? throw new Exception("User not found");
+    }
+
+    public async Task<User> GetUserWithPhotosAsync()
+    {
+        return await dbContext.Users
+            .Include(u => u.Photos)
+            .FirstOrDefaultAsync(u => u.Id == GetUserId())
             ?? throw new Exception("User not found");
     }
 }

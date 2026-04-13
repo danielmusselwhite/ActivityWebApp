@@ -8,6 +8,11 @@ namespace Application.Core;
 
 public class MappingProfiles : Profile
 {
+    /// <summary>
+    /// Defines the mapping profiles for AutoMapper, specifying how to map between domain models and DTOs.
+    /// Allows for easy transformation of data between different layers of the application, such as from the database entities to the API response models.
+    /// Including: Projection, Reverse Mapping, and Custom Mappings for specific properties.
+    /// </summary>
     public MappingProfiles()
     {
         CreateMap<Activity, Activity>();
@@ -23,6 +28,8 @@ public class MappingProfiles : Profile
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
             .ForMember(d => d.Bio, o => o.MapFrom(s => s.User.Bio))
             .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.User.ImageUrl));
+
+        CreateMap<User, UserProfile>();
     }
 
 }
