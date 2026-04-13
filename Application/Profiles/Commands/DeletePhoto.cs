@@ -21,10 +21,10 @@ public class DeletePhoto
         {
             // if user is trying to delete their main photo, return an error
             var user = await userAccessor.GetUserWithPhotosAsync();
-            var photo = user.ImageUrl == null ? null : user.Photos.FirstOrDefault(p => p.UserId == user.Id && p.Url == user.ImageUrl);
+            var photo = user.Photos.FirstOrDefault(p => p.Id == request.PhotoId);
             
             if (photo == null) return Result<Unit>.Failure("Photo not found", 404);
-            if (photo.PublicId == request.PhotoId) return Result<Unit>.Failure("You cannot delete your main photo", 409);
+            if (photo.Url == user.ImageUrl) return Result<Unit>.Failure("You cannot delete your main photo", 409);
 
             // delete the photo from the cloud storage and database
             var cloudResult = await photoService.DeletePhotoAsync(photo.PublicId);
