@@ -18,11 +18,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Activities\Commands\" />
     <Folder Include="Activities\Queries\" />
     <Folder Include="Errors\" />
-    <Folder Include="Profiles\" />
-    <Folder Include="Profiles\DTOs\" />
   </ItemGroup>
 
 </Project>

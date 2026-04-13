@@ -55,8 +55,9 @@ builder.Services.AddValidatorsFromAssemblyContaining<Application.Activities.Vali
 // Add custom middleware for exception handling.
 builder.Services.AddTransient<ExceptionMiddleware>();
 
-// Add custom service for accessing the current user.
+// Add custom services
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 #endregion
 
 #region Identity Services

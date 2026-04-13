@@ -11,5 +11,6 @@ public class User : IdentityUser
     
     #region navigation props
     public ICollection<ActivityAttendee> Attendees { get; set; } = new List<ActivityAttendee>();
+    public ICollection<Photo> Photos { get; set; } = new List<Photo>();
     #endregion
 }
