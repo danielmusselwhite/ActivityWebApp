@@ -11,8 +11,8 @@ public class Photo
 
     #region navigation properties
     public required string UserId { get; set; }
-    [JsonIgnore]
-    public User User { get; set; } = null!;
+    [JsonIgnore] // to prevent circular reference when serializing the user, we ignore the user property when serializing a photo
+    public User User { get; set; } = null!; 
     #endregion
 
 }
