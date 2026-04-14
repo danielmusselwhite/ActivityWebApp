@@ -1,6 +1,11 @@
 import { Avatar, Box, Button, Chip, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
+import type { Profile } from "../../lib/types";
 
-export default function ProfileHeader() {
+type Props = {
+    profile: Profile
+}
+
+export default function ProfileHeader({ profile }: Props) {
     const isFollowing = true; // todo - temp until we implement API-side funcitonality
   
     return (
@@ -8,9 +13,9 @@ export default function ProfileHeader() {
             <Grid container spacing={2}>
                 <Grid size={8}>
                     <Stack direction='row' spacing={3} alignItems='center'>
-                        <Avatar sx={{width: 150, height: 150}} />
+                        <Avatar sx={{width: 150, height: 150}} src={profile.imageUrl} alt={`${profile.displayName}'s profile picture`} />
                         <Box display='flex' flexDirection='column' gap={2}>
-                            <Typography variant="h4">Display name</Typography>
+                            <Typography variant="h4">{profile.displayName}</Typography>
                             {isFollowing && <Chip variant="outlined" color="secondary" label="Following" 
                             sx={{borderRadius: 1}}
                             />}
