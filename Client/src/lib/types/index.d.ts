@@ -14,6 +14,7 @@ export type Activity = {
   isHost: boolean;
   hostId: string;
   hostDisplayName: string;
+  hostImageUrl: string;
 };
 
 export type Profile = {
