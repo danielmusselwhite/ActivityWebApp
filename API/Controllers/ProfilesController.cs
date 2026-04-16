@@ -13,7 +13,7 @@ public class ProfilesController() : BaseApiController
     [HttpPost("add-photo")]
     public async Task<IActionResult> AddPhoto([FromForm] IFormFile file)
     {
-       return HandleResult(await Mediator.Send(new AddPhoto.Command { File = file }));
+        return HandleResult(await Mediator.Send(new AddPhoto.Command { File = file }));
     }
 
     [HttpGet("{userId}/photos")]
@@ -31,12 +31,12 @@ public class ProfilesController() : BaseApiController
     [HttpDelete("{photoId}/photos")]
     public async Task<IActionResult> DeletePhoto(string photoId)
     {
-       return HandleResult(await Mediator.Send(new DeletePhoto.Command { PhotoId = photoId }));
+        return HandleResult(await Mediator.Send(new DeletePhoto.Command { PhotoId = photoId }));
     }
 
-    [HttpPut("{photoId}/setMain")]
+    [HttpPut("{photoId}/set-main")]
     public async Task<IActionResult> SetMainPhoto(string photoId)
     {
-       return HandleResult(await Mediator.Send(new SetMainPhoto.Command { PhotoId = photoId }));
+        return HandleResult(await Mediator.Send(new SetMainPhoto.Command { PhotoId = photoId }));
     }
 }

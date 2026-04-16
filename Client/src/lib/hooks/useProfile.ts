@@ -56,6 +56,28 @@ export const useProfile = (id?: string) => {
 
         }
     })
+
+    const setMainPhoto = useMutation({
+        mutationFn: async (photo: Photo) => {
+            await agent.put(`/profiles/${photo.id}/set-main`); // Send a PUT request to set the specified photo as the main photo for the profile
+        },
+        onSuccess: async (_, photo) => { // on Success, invalidate the user and profile to update the profile photo in the cache with the new main photo URL
+            queryClient.setQueryData(['user'], (data: User) => {
+                if (!data) return data;
+                return {
+                    ...data,
+                    imageUrl: photo.url
+                }
+            });
+            queryClient.setQueryData(['profile', id], (data: Profile) => {
+                if (!data) return data;
+                return {
+                    ...data,
+                    imageUrl: photo.url
+                }
+            });
+        }
+    })
     // #endregion
 
     // #region Memoized values (meaning they will only be recalculated when their dependencies change)
@@ -65,5 +87,5 @@ export const useProfile = (id?: string) => {
     }, [id, queryClient])
     // #endregion
 
-    return { profile, loadingProfile, photos, loadingPhotos, isCurrentUser, uploadPhoto };
+    return { profile, loadingProfile, photos, loadingPhotos, isCurrentUser, uploadPhoto, setMainPhoto };
 }
