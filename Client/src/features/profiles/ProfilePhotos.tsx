@@ -3,6 +3,7 @@ import SimpleFrag from "../../app/shared/components/SimpleFrag";
 import { useProfile } from "../../lib/hooks/useProfile";
 import { Box, Button, ImageList, ImageListItem } from "@mui/material";
 import { useState } from "react";
+import PhotoUploadWidget from "../../app/shared/components/PhotoUploadWidget";
 
 export default function ProfilePhotos() {
 
@@ -25,7 +26,7 @@ export default function ProfilePhotos() {
 
             {/* If user is in edit mode, show the photo widget; else, show the photo list */}
             {editMode ? (
-                <div>Photo widget goes here</div>
+                <PhotoUploadWidget />
             ) : (
 
                 <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
