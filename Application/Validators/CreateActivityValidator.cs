@@ -4,7 +4,7 @@ using Application.Activities.DTOs;
 using Application.Validators;
 using FluentValidation;
 
-namespace Application.Activities.Validators;
+namespace Application.Validators;
 
 public class CreateActivityValidator : BaseActivityValidator<CreateActivity.Command, CreateActivityDTO>
 {

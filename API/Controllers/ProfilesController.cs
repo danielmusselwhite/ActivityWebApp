@@ -28,6 +28,12 @@ public class ProfilesController() : BaseApiController
         return HandleResult(await Mediator.Send(new GetProfile.Query { UserId = userId }));
     }
 
+    [HttpPut]
+    public async Task<ActionResult> EditProfile(EditProfileDTO profile)
+    {
+        return HandleResult(await Mediator.Send(new EditProfile.Command { ProfileDto = profile }));
+    }
+
     [HttpDelete("{photoId}/photos")]
     public async Task<IActionResult> DeletePhoto(string photoId)
     {
