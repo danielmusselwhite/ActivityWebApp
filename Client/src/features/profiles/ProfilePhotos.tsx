@@ -20,7 +20,7 @@ export default function ProfilePhotos() {
             {isCurrentUser && (
                 <Box>
                     {/* Toggle edit mode on click */}
-                    <Button onClick={() => setEditMode(!editMode)}>{editMode ? 'Cancel' : 'Edit'}</Button>
+                    <Button onClick={() => setEditMode(!editMode)}>{editMode ? 'Cancel' : 'Upload'}</Button>
                 </Box>
             )}
 
