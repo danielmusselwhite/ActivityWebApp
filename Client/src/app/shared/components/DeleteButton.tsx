@@ -1,11 +1,7 @@
-import { Star, StarBorder } from "@mui/icons-material";
+import { Delete, DeleteOutline } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
 
-type Props = {
-  selected: boolean;
-};
-
-export default function StarButton({ selected }: Props) {
+export default function DeleteButton() {
   return (
     <Box sx={{ position: "relative" }}>
       <Button
@@ -16,7 +12,7 @@ export default function StarButton({ selected }: Props) {
           cursor: "pointer",
         }}
       >
-        <StarBorder
+        <DeleteOutline
           sx={{
             fontSize: 32,
             position: "absolute",
@@ -24,10 +20,10 @@ export default function StarButton({ selected }: Props) {
           }}
         />
 
-        <Star
+        <Delete
           sx={{
             fontSize: 27,
-            color: selected ? "yellow" : "gray",
+            color: "red",
           }}
         />
       </Button>

@@ -78,6 +78,17 @@ export const useProfile = (id?: string) => {
             });
         }
     })
+
+    const deletePhoto = useMutation({
+        mutationFn: async (photoId: string) => {
+            await agent.delete(`/profiles/${photoId}`); // Send a DELETE request to delete the specified photo for the profile
+        },
+        onSuccess: async (_, photoId) => { // on Success, set the photos in the cache to a new array that filters out the deleted photo
+            queryClient.setQueryData(['photos', id], (photos: Photo[]) => {
+                return photos?.filter(x => x.id !== photoId)
+            });
+        }
+    })
     // #endregion
 
     // #region Memoized values (meaning they will only be recalculated when their dependencies change)
@@ -87,5 +98,5 @@ export const useProfile = (id?: string) => {
     }, [id, queryClient])
     // #endregion
 
-    return { profile, loadingProfile, photos, loadingPhotos, isCurrentUser, uploadPhoto, setMainPhoto };
+    return { profile, loadingProfile, photos, loadingPhotos, isCurrentUser, uploadPhoto, setMainPhoto, deletePhoto };
 }
