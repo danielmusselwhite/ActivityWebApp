@@ -23,10 +23,12 @@ export const useActivities = (id?: string) => {
     
     select: data => { // Transform the data to include isHost and isGoing properties
       return data.map(activity => {
+        const host = activity.attendees.find(a => a.id === activity.hostId);
         return {
           ...activity,
-          isHost: currentUser?.id === activity.hostId,
-          isGoing: activity.attendees.some(a => a.id === currentUser?.id)
+          isHost: currentUser?.id === host?.id,
+          isGoing: activity.attendees.some(a => a.id === currentUser?.id),
+          hostImageUrl: host?.imageUrl
         }
       })
     }
@@ -42,10 +44,12 @@ export const useActivities = (id?: string) => {
     enabled: !!id
      && !!currentUser,
     select: data => { // Transform the data to include isHost and isGoing properties
+      const host = data.attendees.find(a => a.id === data.hostId);
       return {
         ...data,
-        isHost: currentUser?.id === data.hostId,
-        isGoing: data.attendees.some(a => a.id === currentUser?.id)
+        isHost: currentUser?.id === host?.id,
+        isGoing: data.attendees.some(a => a.id === currentUser?.id),
+        hostImageUrl: host?.imageUrl
       }
     }
   })

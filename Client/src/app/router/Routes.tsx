@@ -11,6 +11,7 @@ import ServerError from '../../features/errors/ServerError';
 import LoginForm from '../../features/account/LoginForm';
 import RequireAuth from './RequireAuth';
 import RegisterForm from '../../features/account/RegisterForm';
+import ProfilePage from '../../features/profiles/ProfilePage';
 
 
 export const router = createBrowserRouter([
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
                 {path: 'activities/:id', element: <ActivityDetailPage /> }, //':id is param string in url
                 {path: 'manage/:id', element: <ActivityForm /> }, //':id is param string in url
                 {path: 'createActivity', element: <ActivityForm key='create'/> }, // key so that it resets if re-navigated to (eg from one instance of create activity to another)
+                {path: 'profiles/:id', element: <ProfilePage key='profile'/> }, //':id is param string in url
             ]},
 
             // public routes
