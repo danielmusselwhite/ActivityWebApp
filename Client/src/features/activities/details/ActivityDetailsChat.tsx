@@ -1,7 +1,11 @@
 import { Box, Typography, Card, CardContent, TextField, Avatar } from "@mui/material";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
+import { useComments } from "../../../lib/hooks/useComments";
 
 export default function ActivityDetailsChat() {
+    const { id } = useParams();
+    const { commentStore } = useComments(id);
+
     return (
         <>
             <Box

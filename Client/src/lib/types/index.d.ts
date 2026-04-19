@@ -17,6 +17,15 @@ export type Activity = {
   hostImageUrl: string;
 };
 
+export type ActivityComment = {
+  id: string;
+  body: string;
+  createdAt: Date;
+  userId: string;
+  displayName: string;
+  imageUrl?: string;
+}
+
 export type Profile = {
   id: string;
   displayName: string;
