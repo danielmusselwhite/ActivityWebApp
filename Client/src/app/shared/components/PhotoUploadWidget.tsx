@@ -106,7 +106,6 @@ export default function PhotoUploadWidget({ uploadPhoto, loading }: Props) {
               disabled={loading}
               variant="contained"
               color="secondary"
-              fullWidth
             >
               Upload Photo
             </Button>
