@@ -10,9 +10,9 @@ public class Comment
 
     #region Nav Properties
     public required string UserId { get; set; }
-    public required User User { get; set; }
+    public User User { get; set; } = null!;
 
     public required string ActivityId { get; set; }
-    public required Activity Activity { get; set; }
+    public Activity Activity { get; set; } = null!;
     #endregion
 }
