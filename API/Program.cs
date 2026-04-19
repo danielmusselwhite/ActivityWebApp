@@ -1,4 +1,5 @@
 using API.Middleware;
+using API.SignalR;
 using Application.Activities.Queries;
 using Application.Core;
 using Application.Interfaces;
@@ -31,6 +32,9 @@ builder.Services.AddDbContext<Persistence.AppDbContext>(options =>
 
 // Add Cross-Origin Resource Sharing (CORS) services.
 builder.Services.AddCors();
+
+// Add SignalR for real-time communication.
+builder.Services.AddSignalR();
 
 // Configure mapping of Cloudinary settings from appsettings.json.
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
@@ -107,6 +111,9 @@ app.MapControllers();
 
 // Map Identity API endpoints for user management.
 app.MapGroup("api").MapIdentityApi<User>();
+
+// Map SignalR hubs for real-time communication.
+app.MapHub<CommentHub>("/comments");
 #endregion
 
 #region Database Seeding

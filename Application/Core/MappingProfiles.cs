@@ -18,7 +18,7 @@ public class MappingProfiles : Profile
         CreateMap<Activity, Activity>();
         CreateMap<CreateActivityDTO, Activity>().ReverseMap();
         CreateMap<EditActivityDTO, Activity>().ReverseMap();
-        
+
         CreateMap<Activity, ActivityDTO>()
             .ForMember(d => d.HostDisplayName, o => o.MapFrom(s => s.Attendees.FirstOrDefault(x => x.IsHost)!.User.DisplayName))
             .ForMember(d => d.HostId, o => o.MapFrom(s => s.Attendees.FirstOrDefault(x => x.IsHost)!.User.Id));
@@ -30,6 +30,11 @@ public class MappingProfiles : Profile
             .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.User.ImageUrl));
 
         CreateMap<User, UserProfile>();
+
+        CreateMap<Comment, CommentDTO>()
+        .ForMember(d => d.UserId, o => o.MapFrom(s => s.User.Id))
+        .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
+        .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.User.ImageUrl));
     }
 
 }
