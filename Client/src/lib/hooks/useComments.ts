@@ -2,6 +2,7 @@ import { useLocalObservable } from "mobx-react-lite";
 import { HubConnection, HubConnectionBuilder, HubConnectionState } from "@microsoft/signalr";
 import { useEffect, useRef } from "react";
 import type { ActivityComment } from "../types";
+import { runInAction } from "mobx";
 
 export const useComments = (activityId?: string) => {
     const created = useRef(false);
@@ -24,11 +25,15 @@ export const useComments = (activityId?: string) => {
 
             //#region SignalR event handlers
             this.hubConnection.on("LoadComments", (comments: ActivityComment[]) => { // Listen for the "LoadComments" event from the server
-                this.comments = comments; // Set the comments array to the received comments from the server
+                runInAction(() => { // Use runInAction to update the observable state within the MobX store
+                    this.comments = comments; // Set the comments array to the loaded comments from the server
+                });
             });
 
             this.hubConnection.on("ReceiveComment", (comment: ActivityComment) => { // Listen for the "ReceiveComment" event from the server
-                this.comments.unshift(comment); // Add the new comment to the beginning of the comments array
+                runInAction(() => { // Use runInAction to update the observable state within the MobX store
+                    this.comments.unshift(comment); // Add the new comment to the beginning of the comments array
+                });
             });
             //#endregion
         },
