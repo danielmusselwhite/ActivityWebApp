@@ -31,6 +31,13 @@ public class EditProfile
             thisUser.DisplayName = request.ProfileDto.DisplayName;
             thisUser.Bio = request.ProfileDto.Bio;
 
+            #region If no change required return success
+            var hasChanges = context.Entry(thisUser).Properties
+            .Any(p => p.IsModified);
+            if (!hasChanges)
+                return Result<Unit>.Success(Unit.Value);
+            #endregion
+
             var result = await context.SaveChangesAsync(cancellationToken);
 
             if (result <= 0) return Result<Unit>.Failure("Failed to update User Record", 400);
