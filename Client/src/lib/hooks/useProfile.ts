@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
 import type { Photo, Profile, User } from "../types";
 import { useMemo } from "react";
+import { editProfileSchema, type EditProfileSchema } from '../schemas/editProfileSchema';
 
 export const useProfile = (id?: string) => {
 
@@ -89,6 +90,30 @@ export const useProfile = (id?: string) => {
             });
         }
     })
+
+    const editProfile = useMutation({
+        mutationFn: async (profile: EditProfileSchema) => {
+            await agent.put('/profiles', profile); // Send a PUT request to set the profile
+        },
+        
+        onSuccess: async (_, profile) => { // on Success, invalidate the user and profile to update the display name and bio
+            queryClient.setQueryData(['user'], (data: User) => {
+                if (!data) return data;
+                return {
+                    ...data,
+                    displayName: profile.displayName
+                }
+            });
+            queryClient.setQueryData(['profile', id], (data: Profile) => {
+                if (!data) return data;
+                return {
+                    ...data,
+                    displayName: profile.displayName,
+                    bio: profile.bio
+                }
+            });
+        }
+    })
     // #endregion
 
     // #region Memoized values (meaning they will only be recalculated when their dependencies change)
@@ -98,5 +123,5 @@ export const useProfile = (id?: string) => {
     }, [id, queryClient])
     // #endregion
 
-    return { profile, loadingProfile, photos, loadingPhotos, isCurrentUser, uploadPhoto, setMainPhoto, deletePhoto };
+    return { profile, loadingProfile, photos, loadingPhotos, isCurrentUser, uploadPhoto, setMainPhoto, deletePhoto, editProfile };
 }

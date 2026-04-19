@@ -50,7 +50,9 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 // Add FluentValidation for request validation.
-builder.Services.AddValidatorsFromAssemblyContaining<Application.Activities.Validators.CreateActivityValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<Application.Validators.CreateActivityValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<Application.Validators.EditActivityValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<Application.Validators.EditProfileValidator>();
 
 // Add custom middleware for exception handling.
 builder.Services.AddTransient<ExceptionMiddleware>();
