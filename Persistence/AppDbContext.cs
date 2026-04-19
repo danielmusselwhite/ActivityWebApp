@@ -11,6 +11,7 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
     public required DbSet<Activity> Activities { get; set; }
     public required DbSet<ActivityAttendee> ActivityAttendees { get; set; }
     public required DbSet<Photo> Photos { get; set; }
+    public required DbSet<Comment> Comments { get; set; }
     #endregion
 
     protected override void OnModelCreating(ModelBuilder builder)
